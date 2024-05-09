@@ -9,7 +9,7 @@ export class CreatePostDto {
   media: Media[];
 
   @IsOptional()
-  content: string;
+  content?: string;
 
   @IsOptional()
   tags: string[];

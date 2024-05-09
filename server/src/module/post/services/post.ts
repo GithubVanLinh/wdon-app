@@ -4,6 +4,7 @@ import { Model } from 'mongoose';
 import { Post } from '../model/post.schema';
 import { CreatePostDto } from '../dto/create-post.dto';
 import { TagService } from './tag';
+import { getFullMediaUrl } from 'src/utils/url';
 
 @Injectable()
 export class PostService {
@@ -16,12 +17,9 @@ export class PostService {
     const session = await this.postModel.startSession();
     session.startTransaction();
     try {
-      const tags = await this.tagService.createTags(
-        session,
-        createPostDto.tags,
-      );
-
-      // console.log('data', createPostDto, tags);
+      const tags =
+        createPostDto.tags &&
+        (await this.tagService.createTags(session, createPostDto.tags));
 
       const newPost = await new this.postModel({
         content: createPostDto.content,
@@ -39,6 +37,11 @@ export class PostService {
       throw e;
     }
   }
-  getPost() {}
+
+  async getPost(postId: string) {
+    const post = await this.postModel.findById(postId).populate('profile');
+    post.media.map((p) => (p.url = getFullMediaUrl(p.url)));
+    return post;
+  }
   getPosts() {}
 }

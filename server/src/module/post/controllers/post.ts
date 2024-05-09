@@ -1,17 +1,20 @@
 import {
   Body,
   Controller,
+  Get,
+  Param,
   Post,
   UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 
-import { saveFileToLocal } from 'wd-type-utilities';
+import { deleteFileFromLocal, saveFileToLocal } from 'wd-type-utilities';
 import { CreatePostDto } from '../dto/create-post.dto';
 import { ProfileId } from 'src/module/auth/decorators/user';
 import { PostService } from '../services/post';
 import { MediaEnum } from '../model/post.schema';
+import { extractTagFromString } from 'src/utils/string';
 
 const MIMETYPE = ['image/png', 'image/jpeg', 'video/mp4'];
 
@@ -37,13 +40,25 @@ export class PostController {
       const name = saveFileToLocal('./uploads/', file);
       listName.push(name);
     }
+    const tags = extractTagFromString(createPostDto.content || '');
+    try {
+      const post = await this.postService.createPost({
+        content: createPostDto.content,
+        media: listName.map((name) => ({ type: MediaEnum.IMAGE, url: name })),
+        profile: profileId,
+        tags: tags,
+      });
+      return post;
+    } catch (error) {
+      for (const name of listName) {
+        deleteFileFromLocal('./uploads/' + name);
+      }
+      throw error;
+    }
+  }
 
-    const post = await this.postService.createPost({
-      content: createPostDto.content,
-      media: listName.map((name) => ({ type: MediaEnum.IMAGE, url: name })),
-      profile: profileId,
-      tags: ['unknow'],
-    });
-    return post;
+  @Get('/:postId')
+  async getPost(@Param('postId') postId: string) {
+    return await this.postService.getPost(postId);
   }
 }
