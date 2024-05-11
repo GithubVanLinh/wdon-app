@@ -1,5 +1,5 @@
-import { IsEmpty, IsOptional } from 'class-validator';
-import { Media } from '../model/post.schema';
+import { IsEmpty, IsEnum, IsNotEmpty, IsOptional } from 'class-validator';
+import { Media, PostAuthEnum } from '../model/post.schema';
 
 export class CreatePostDto {
   @IsEmpty()
@@ -13,4 +13,8 @@ export class CreatePostDto {
 
   @IsOptional()
   tags: string[];
+
+  @IsEnum(PostAuthEnum)
+  @IsNotEmpty()
+  auth: PostAuthEnum;
 }

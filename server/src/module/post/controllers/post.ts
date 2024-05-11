@@ -4,6 +4,7 @@ import {
   Get,
   Param,
   Post,
+  UnauthorizedException,
   UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
@@ -13,14 +14,18 @@ import { deleteFileFromLocal, saveFileToLocal } from 'wd-type-utilities';
 import { CreatePostDto } from '../dto/create-post.dto';
 import { ProfileId } from 'src/module/auth/decorators/user';
 import { PostService } from '../services/post';
-import { MediaEnum } from '../model/post.schema';
+import { MediaEnum, PostAuthEnum } from '../model/post.schema';
 import { extractTagFromString } from 'src/utils/string';
+import { FriendService } from 'src/module/communication/service';
 
 const MIMETYPE = ['image/png', 'image/jpeg', 'video/mp4'];
 
 @Controller('posts')
 export class PostController {
-  constructor(private postService: PostService) {}
+  constructor(
+    private postService: PostService,
+    private friendService: FriendService,
+  ) {}
 
   @Post()
   @UseInterceptors(
@@ -46,6 +51,7 @@ export class PostController {
         content: createPostDto.content,
         media: listName.map((name) => ({ type: MediaEnum.IMAGE, url: name })),
         profile: profileId,
+        auth: createPostDto.auth,
         tags: tags,
       });
       return post;
@@ -58,7 +64,34 @@ export class PostController {
   }
 
   @Get('/:postId')
-  async getPost(@Param('postId') postId: string) {
-    return await this.postService.getPost(postId);
+  async getPost(
+    @ProfileId() profileId: string,
+    @Param('postId') postId: string,
+  ) {
+    const post = await this.postService.getPost(postId);
+
+    if (post.profile.id === profileId) {
+      return post;
+    }
+
+    switch (post.auth) {
+      case PostAuthEnum.ANYONE:
+        break;
+      case PostAuthEnum.FRIENDS: {
+        const isFriend = await this.friendService.isFriend(
+          profileId,
+          post.profile.id,
+        );
+        if (isFriend) {
+          return { ...post.toObject(), from_friend: true };
+        }
+        throw new UnauthorizedException();
+      }
+      case PostAuthEnum.ONLY_ME:
+      default:
+        throw new UnauthorizedException();
+    }
+
+    return post;
   }
 }

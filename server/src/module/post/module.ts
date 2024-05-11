@@ -5,6 +5,7 @@ import { Tag, TagSchema } from './model/tag.schema';
 import { Post, PostSchema } from './model/post.schema';
 import { PostService } from './services/post';
 import { TagService } from './services/tag';
+import { CommunicationModule } from '../communication/module';
 
 @Module({
   imports: [
@@ -12,6 +13,7 @@ import { TagService } from './services/tag';
       { name: Post.name, schema: PostSchema },
       { name: Tag.name, schema: TagSchema },
     ]),
+    CommunicationModule,
   ],
   controllers: [PostController],
   providers: [PostService, TagService],
