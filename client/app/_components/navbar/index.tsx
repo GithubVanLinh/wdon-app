@@ -36,7 +36,7 @@ export function Navbar() {
         dispatcher(chooseFriend());
       }
     }
-  }, []);
+  }, [dispatcher]);
 
   if (!logged) {
     return <></>;

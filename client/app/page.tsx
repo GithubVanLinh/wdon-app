@@ -23,14 +23,15 @@ export default function Dashboard() {
   const router = useRouter();
 
   const page = useAppSelector((state) => state.dashboard.target);
-
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
       router.push("/login");
     }
   });
-
+  if (typeof window === "undefined") {
+    return <div></div>;
+  }
   if (page === "home") {
     return <Home />;
   } else {

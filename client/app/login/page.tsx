@@ -7,34 +7,38 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useAppDispatch } from "../_lib/hook";
 import { loging, setAvatar } from "../_lib/features/user/logged";
+import axios from "axios";
 
 export default function Login() {
   const [formValue, setFormValue] = useState({ username: "", password: "" });
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
-  const token = localStorage.getItem("token");
   const dispatch = useAppDispatch();
+  if (typeof window === "undefined") {
+  }
+  const token = localStorage.getItem("token");
   if (token) {
     router.replace("/");
   }
 
   async function handleOnsubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const myHeaders = new Headers();
-    myHeaders.append("Content-Type", "application/json");
-    const response = await fetch("http://localhost:3001/auths/login", {
-      method: "POST",
-      headers: myHeaders,
-      body: JSON.stringify({
-        username: formValue.username,
-        password: formValue.password,
-      }),
-    });
-
-    if (!response.ok) {
-      setError("error");
-    } else {
-      const data = await response.json();
+    console.log("formvalue", formValue);
+    try {
+      const response = await axios.post(
+        "http://localhost:3001/auth/login",
+        JSON.stringify({
+          username: formValue.username,
+          password: formValue.password,
+        }),
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const data = await response.data;
       localStorage.setItem("token", data.data.access_token);
       const avatar =
         "https://cdn3.iconfinder.com/data/icons/shinysocialball/512/Technorati_512x512.png";
@@ -42,6 +46,8 @@ export default function Login() {
       dispatch(loging(data.data.access_token));
       dispatch(setAvatar(avatar));
       router.replace("/");
+    } catch (error) {
+      setError("error");
     }
   }
 
@@ -53,7 +59,7 @@ export default function Login() {
 
   return (
     <Card>
-      <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-0 dark:bg-gray-800 dark:border-gray-700">
+      <div className="w-full bg-white rounded-lg shadow dark:border md:mt-0 sm:max-w-md xl:p-2 dark:bg-gray-800 dark:border-gray-700">
         <AppIcon />
         <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
           <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
@@ -81,7 +87,7 @@ export default function Login() {
               onChange={handleChange}
               required={true}
             />
-            <Button name="sign in" type="submit"></Button>
+            <Button name="Log in" type="submit"></Button>
             <p className="text-sm font-light text-gray-500 dark:text-gray-400">
               Don’t have an account yet?{" "}
               <Link
