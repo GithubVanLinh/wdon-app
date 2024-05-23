@@ -17,6 +17,7 @@ import { PostService } from '../services/post';
 import { MediaEnum, PostAuthEnum } from '../model/post.schema';
 import { extractTagFromString } from 'src/utils/string';
 import { FriendService } from 'src/module/communication/service';
+import { Public } from 'src/module/auth/decorators/public';
 
 const MIMETYPE = ['image/png', 'image/jpeg', 'video/mp4'];
 
@@ -93,5 +94,13 @@ export class PostController {
     }
 
     return post;
+  }
+
+  //TODO
+  @Get('/')
+  @Public()
+  async getPosts() {
+    const posts = await this.postService.getPosts();
+    return posts;
   }
 }

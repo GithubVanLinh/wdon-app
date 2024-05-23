@@ -1,6 +1,6 @@
 "use client";
 
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useState } from "react";
 import { Button, AppIcon, Card, Input } from "../_components";
 import LoginGoogle from "../_components/login-google-icon";
 import Link from "next/link";
@@ -14,12 +14,15 @@ export default function Login() {
   const [error, setError] = useState<string | null>(null);
   const router = useRouter();
   const dispatch = useAppDispatch();
-  if (typeof window === "undefined") {
-  }
-  const token = localStorage.getItem("token");
-  if (token) {
-    router.replace("/");
-  }
+
+  console.log("login");
+  useEffect(() => {
+    console.log("_login");
+    const token = localStorage.getItem("token");
+    if (token) {
+      router.push("/");
+    }
+  }, [router]);
 
   async function handleOnsubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -47,11 +50,14 @@ export default function Login() {
       dispatch(setAvatar(avatar));
       router.replace("/");
     } catch (error) {
-      setError("error");
+      setError("username or password is invalid");
     }
   }
 
   function handleChange(e: any) {
+    if (error) {
+      setError(null);
+    }
     const name = e.target.name;
     const value = e.target.value;
     setFormValue({ ...formValue, [name]: value });
@@ -64,7 +70,6 @@ export default function Login() {
         <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
           <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl dark:text-white">
             Sign in to your account{" "}
-            <span className="text-red-600">{error}</span>
           </h1>
           <form
             className="space-y-4 md:space-y-6"
@@ -87,6 +92,8 @@ export default function Login() {
               onChange={handleChange}
               required={true}
             />
+
+            <span className="text-red-600">{error}</span>
             <Button name="Log in" type="submit"></Button>
             <p className="text-sm font-light text-gray-500 dark:text-gray-400">
               Don’t have an account yet?{" "}

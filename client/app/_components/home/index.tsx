@@ -1,20 +1,36 @@
 import { useRouter } from "next/navigation";
-import { useEffect } from "react";
+import { useCallback, useEffect } from "react";
 import { ContentCard } from "..";
 import { AddPost } from "../content-card/add-post";
 
 import { post } from "./mock-post";
 import { useAppSelector } from "@/app/_lib/hook";
+import axios from "axios";
 
 export default function Home() {
   const router = useRouter();
   const user = useAppSelector((state) => state.user);
 
+  const token = useAppSelector((state) => state.user.token);
+
+  const handleFetchData = useCallback(async () => {
+    const response = await axios.get("http://localhost:3001/posts", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    console.log("data", response.data);
+  }, [token]);
+
   useEffect(() => {
+    console.log("in home");
     console.log("usr", user);
     if (!user.logged) {
       console.log("push to login");
       router.push("/login");
+    } else {
+      handleFetchData();
     }
   });
 

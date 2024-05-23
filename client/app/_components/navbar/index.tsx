@@ -13,36 +13,38 @@ import { Button } from "@nextui-org/react";
 import { PersonalDropdown } from "./personal-dropdown";
 import { HOME_PAGE_TARGET, TARGET_PAGE } from "./const";
 import { chooseFriend, chooseHome } from "@/app/_lib/features/home/dashboard";
+import Loading from "../loading";
 
 export function Navbar() {
-  const [token, setToken] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
-  const logged = useAppSelector((state) => state.user.logged);
+  // const logged = useAppSelector((state) => state.user.logged);
   const chooseDashboard = useAppSelector((state) => state.dashboard.target);
   const dispatcher = useAppDispatch();
 
-  useEffect(() => {
-    const tk = localStorage.getItem("token");
-    const avatar = localStorage.getItem("avatar") ?? "/person.svg";
-    const targetPage = localStorage.getItem(TARGET_PAGE) ?? HOME_PAGE_TARGET;
-    console.log("tk", tk);
-    if (tk) {
-      dispatcher(loging(tk));
-      dispatcher(setAvatar(avatar));
-      if (targetPage === HOME_PAGE_TARGET) {
-        dispatcher(chooseHome());
-      } else {
-        dispatcher(chooseFriend());
-      }
-    }
-  }, [dispatcher]);
+  console.log("nav bar");
 
-  if (!logged) {
-    return <></>;
-  }
-
-  return (
+  // useEffect(() => {
+  //   const tk = localStorage.getItem("token");
+  //   const avatar = localStorage.getItem("avatar") ?? "/person.svg";
+  //   const targetPage = localStorage.getItem(TARGET_PAGE) ?? HOME_PAGE_TARGET;
+  //   if (tk) {
+  //     dispatcher(loging(tk));
+  //     dispatcher(setAvatar(avatar));
+  //     if (targetPage === HOME_PAGE_TARGET) {
+  //       dispatcher(chooseHome());
+  //     } else {
+  //       dispatcher(chooseFriend());
+  //     }
+  //   } else {
+  //     router.replace("/login");
+  //   }
+  //   setLoading(false);
+  // }, [dispatcher, router]);
+  return loading ? (
+    <Loading hidden />
+  ) : (
     <>
       <nav className="bg-white dark:bg-gray-900 fixed w-full z-20 top-0 start-0 border-b border-gray-200 dark:border-gray-600 p-2">
         <div className="max-w-screen-xl flex flex-wrap items-center justify-between mx-auto p-1">

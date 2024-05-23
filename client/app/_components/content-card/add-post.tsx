@@ -24,21 +24,27 @@ type PostCreate = {
 export function AddPost() {
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
   const [postLoading, setPostLoading] = useState(false);
+  const [selectedImage, setSelectedImage] = useState([] as any[]);
   const _initialValue: PostCreate = {
     text: "",
     type: "anyone",
   };
   const [post, setPost] = useState<PostCreate>(_initialValue);
-
+  const setMultipleImage = (newImages: any[]) => {
+    setSelectedImage([...selectedImage, ...newImages]);
+  };
   const avatar = useAppSelector((state) => state.user.avatar);
   const token = useAppSelector((state) => state.user.token);
 
   const handleOnPost = async (onClose: () => void) => {
     setPostLoading(true);
-    // window.alert(JSON.stringify({ ...post, token }));
     const formData = new FormData();
     formData.append("content", post.text);
-    const result = await fetch("http://localhost:3001/post/", {
+    formData.append("auth", post.type);
+    selectedImage.forEach((image) => {
+      formData.append("files", image);
+    });
+    const result = await fetch("http://localhost:3001/posts/", {
       method: "POST",
       headers: {
         Authorization: `Bearer ${token}`,
@@ -52,9 +58,6 @@ export function AddPost() {
       setPost(_initialValue);
       onClose();
     }
-    // setTimeout(() => {
-    //   setPostLoading(false);
-    // }, 3000);
   };
 
   return (
@@ -104,8 +107,28 @@ export function AddPost() {
                     type="text"
                     placeholder="What do you think?"
                   ></Textarea>
+
+                  {selectedImage.length > 0 && (
+                    <div>
+                      <div className="grid grid-cols-2">
+                        {selectedImage.map((image, i) => (
+                          <Image
+                            width={200}
+                            height={200}
+                            objectFit="cover"
+                            key={i}
+                            alt="not found"
+                            src={URL.createObjectURL(image)}
+                          />
+                        ))}
+                      </div>
+                      <button onClick={() => setSelectedImage([])}>
+                        Remove
+                      </button>
+                    </div>
+                  )}
                 </div>
-                <MediaAdd />
+                <MediaAdd setSelectedImage={setMultipleImage} />
               </ModalBody>
               <ModalFooter>
                 <Button

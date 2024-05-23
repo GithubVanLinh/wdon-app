@@ -7,3 +7,4 @@ export * from "./content-card";
 export * from "./footer";
 
 export * from "./login-google-icon";
+export * from "./loading";
