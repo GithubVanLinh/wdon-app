@@ -5,7 +5,6 @@ import { Post } from '../model/post.schema';
 import { CreatePostDto } from '../dto/create-post.dto';
 import { TagService } from './tag';
 import { getFullMediaUrl } from 'src/utils/url';
-import { FriendService } from 'src/module/communication/service';
 
 @Injectable()
 export class PostService {
@@ -49,7 +48,6 @@ export class PostService {
   //TODO
   async getPosts() {
     const posts = await this.postModel.find({}).populate('profile');
-    posts.map((p) => p.media.map((m) => (m.url = getFullMediaUrl(m.url))));
     return posts;
   }
 }

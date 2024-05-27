@@ -18,6 +18,7 @@ import { MediaEnum, PostAuthEnum } from '../model/post.schema';
 import { extractTagFromString } from 'src/utils/string';
 import { FriendService } from 'src/module/communication/service';
 import { Public } from 'src/module/auth/decorators/public';
+import { getFullMediaUrl } from 'src/utils/url';
 
 const MIMETYPE = ['image/png', 'image/jpeg', 'video/mp4'];
 
@@ -70,30 +71,31 @@ export class PostController {
     @Param('postId') postId: string,
   ) {
     const post = await this.postService.getPost(postId);
-
-    if (post.profile.id === profileId) {
-      return post;
-    }
-
-    switch (post.auth) {
-      case PostAuthEnum.ANYONE:
-        break;
-      case PostAuthEnum.FRIENDS: {
-        const isFriend = await this.friendService.isFriend(
-          profileId,
-          post.profile.id,
-        );
-        if (isFriend) {
-          return { ...post.toObject(), from_friend: true };
-        }
-        throw new UnauthorizedException();
-      }
-      case PostAuthEnum.ONLY_ME:
-      default:
-        throw new UnauthorizedException();
-    }
-
     return post;
+
+    // if (post.profile.id === profileId) {
+    //   return post;
+    // }
+
+    // switch (post.auth) {
+    //   case PostAuthEnum.ANYONE:
+    //     break;
+    //   case PostAuthEnum.FRIENDS: {
+    //     const isFriend = await this.friendService.isFriend(
+    //       profileId,
+    //       post.profile.id,
+    //     );
+    //     if (isFriend) {
+    //       return { ...post.toObject(), from_friend: true };
+    //     }
+    //     throw new UnauthorizedException();
+    //   }
+    //   case PostAuthEnum.ONLY_ME:
+    //   default:
+    //     throw new UnauthorizedException();
+    // }
+
+    // return post;
   }
 
   //TODO
@@ -101,6 +103,7 @@ export class PostController {
   @Public()
   async getPosts() {
     const posts = await this.postService.getPosts();
+    posts.map((p) => p.media.map((m) => (m.url = getFullMediaUrl(m.url))));
     return posts;
   }
 }
