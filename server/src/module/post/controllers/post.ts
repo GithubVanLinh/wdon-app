@@ -100,7 +100,6 @@ export class PostController {
 
   //TODO
   @Get('/')
-  @Public()
   async getPosts() {
     const posts = await this.postService.getPosts();
     posts.map((p) => p.media.map((m) => (m.url = getFullMediaUrl(m.url))));
