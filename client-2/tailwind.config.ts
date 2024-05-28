@@ -18,6 +18,10 @@ const config: Config = {
         3: "3",
         4: "4",
       },
+      transitionProperty: {
+        height: "height",
+        spacing: "margin, padding",
+      },
     },
   },
   plugins: [],

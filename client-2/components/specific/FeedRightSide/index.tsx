@@ -2,6 +2,8 @@ import List from "@/components/common/List";
 import RounedArea from "@/components/common/RoundedArea";
 import { DivProps } from "@/utils/type/html";
 import HashtagItem from "../HashtagItem";
+import StickyArea from "@/components/common/StickyArea";
+import { MagnifyingGlassIcon } from "@heroicons/react/24/outline";
 
 export interface FeedRightSideProps {}
 
@@ -11,9 +13,14 @@ export default function FeedRightSide({
   return (
     <div {...res}>
       <div className="gap-4 flex flex-col">
-        <div className="sticky top-0 flex">
-          <input className="border"></input>
-        </div>
+        <StickyArea className="w-full p-2 border-l border-r">
+          <div className="flex justify-start items-center">
+            <input className="peer bg-gray-200 pl-10 w-full p-2 outline-blue-600 rounded-full pr-4"></input>
+            <div className="absolute p-2 peer-focus:text-blue-600">
+              <MagnifyingGlassIcon width={20} height={20} />
+            </div>
+          </div>
+        </StickyArea>
 
         <RounedArea className="p-2 flex flex-col bg-white items-start gap-2">
           <h1 className="text-xl">
@@ -47,7 +54,12 @@ export default function FeedRightSide({
               { top: "haha", mid: "ok", bot: "hmm" },
             ]}
             item={(it) => (
-              <HashtagItem category={it.top} name={it.mid} num={it.bot} />
+              <HashtagItem
+                key={it.mid}
+                category={it.top}
+                name={it.mid}
+                num={it.bot}
+              />
             )}
           />
         </RounedArea>
