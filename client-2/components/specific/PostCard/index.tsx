@@ -13,27 +13,49 @@ import {
 } from "@heroicons/react/24/outline";
 import { ReactNode } from "react";
 import MediaShow from "../MediaShow";
+import UserInfo from "../UserInfo";
+import TextTransformer from "@/components/common/TextTransformer";
 
 export interface PostCardProps {
   top?: ReactNode;
   post: Post;
+  onClick?: () => void;
 }
 
-export default function PostCard({ post }: Readonly<PostCardProps>) {
+export default function PostCard({ post, onClick }: Readonly<PostCardProps>) {
   return (
     <div>
-      <div className="flex flex-col hover:bg-gray-200 p-2">
+      <div
+        onClick={(e) => {
+          console.log(e.target);
+          if (
+            e.target instanceof HTMLImageElement ||
+            e.target instanceof HTMLVideoElement
+          ) {
+          } else if (onClick) {
+            onClick();
+          }
+        }}
+        className="flex flex-col hover:bg-gray-200 p-2"
+      >
         <div></div>
         <div className="flex flex-row">
           <div className="flex justify-end items-start p-1 pl-3">
             <Avatar src="https://pbs.twimg.com/media/GOg9e2taMAAgya-?format=jpg&name=medium" />
           </div>
           <div className="flex flex-col w-full">
-            {postInfo("Vu", "link", "8h")}
-            <div>{post.content}</div>
-            <div>
-              <MediaShow media={post.media} />
-            </div>
+            {postInfo(post.profile.firstName, "link", "8h")}
+            {post.content && <TextTransformer text={post.content} />}
+            {post.media && (
+              <div>
+                <MediaShow
+                  media={post.media.map((m) => ({
+                    ...m,
+                    baseLink: `/${post.profile._id}/status/${post._id}/media`,
+                  }))}
+                />
+              </div>
+            )}
             {rateInfo()}
           </div>
         </div>

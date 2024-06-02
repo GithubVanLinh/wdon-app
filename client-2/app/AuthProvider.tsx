@@ -15,6 +15,8 @@ export interface AuthProviderProps {
 
 export const authInstance: { axios?: AxiosInstance } = {};
 
+const whiteList = ["/login", "/"];
+
 export default function AuthProvider({
   children,
 }: Readonly<AuthProviderProps>) {
@@ -30,7 +32,7 @@ export default function AuthProvider({
       if (token) {
         dispatch(setToken(token));
         setLoading(false);
-      } else if (pathname === "/login") {
+      } else if (whiteList.includes(pathname)) {
         setLoading(false);
       } else {
         router.push("/login");

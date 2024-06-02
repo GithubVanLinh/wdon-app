@@ -1,6 +1,7 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument } from 'mongoose';
 import { User } from '../../user/model/user.schema';
+import { BaseSchema } from 'src/schema/base.schema';
 
 export enum AuthType {
   LOCAL = 'local',
@@ -10,7 +11,7 @@ export enum AuthType {
 }
 
 @Schema()
-export class Auth {
+export class Auth extends BaseSchema {
   @Prop({ type: String, enum: AuthType, default: AuthType.LOCAL })
   authType: AuthType;
 
@@ -30,3 +31,10 @@ export class Auth {
 export type AuthDocument = HydratedDocument<Auth>;
 
 export const AuthSchema = SchemaFactory.createForClass(Auth);
+
+AuthSchema.pre('save', function (next) {
+  const date = new Date();
+  this.updatedAt = date;
+  this.createdAt = date;
+  next();
+});

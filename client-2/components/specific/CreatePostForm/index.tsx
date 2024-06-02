@@ -19,7 +19,7 @@ export default function CreatePostForm({}: Readonly<CreatePostFormProps>) {
         <div className="flex grow-0 shrink-0 basis-auto">
           <Avatar src="https://pbs.twimg.com/media/GOg9e2taMAAgya-?format=jpg&name=medium" />
         </div>
-        <div className="flex flex-col grow shrink basis-0 min-w-0 divide-y">
+        <div className="flex flex-col grow shrink basis-0 min-w-0 divide-y divide-gray-100">
           {mainInput()}
           {imageAndPost()}
         </div>

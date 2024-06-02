@@ -1,20 +1,28 @@
 import { Media } from "@/utils/type/post";
 import Image from "next/image";
+import Link from "next/link";
 
 export interface MediaShowProps {
-  media: Media[];
+  media: (Media & { baseLink: string })[];
 }
 
 export default function MediaShow({ media }: Readonly<MediaShowProps>) {
   return (
     <div>
-      <div className="rounded-lg overflow-hidden max-h-96 grid grid-rows-2 grid-flow-col gap-px">
+      <div
+        className={
+          "rounded-lg overflow-hidden max-h-96 grid grid-flow-col gap-px" +
+          (media.length === 2 ? " grid-rows-1" : " grid-rows-2")
+        }
+      >
         {media.map((m, i) => {
           return (
-            <div
+            <Link
+              scroll={false}
+              href={m.baseLink + "/" + (i + 1)}
               key={m.url}
               className={
-                "flex bg-black " +
+                "flex bg-black justify-center items-center " +
                 (media.length % 2 === 1 && i === 0 && "row-span-2")
               }
             >
@@ -23,16 +31,21 @@ export default function MediaShow({ media }: Readonly<MediaShowProps>) {
                   alt="image"
                   width={400}
                   height={400}
-                  className="object-cover grow flex shrink basis-0"
+                  className="object-cover w-full h-full"
                   src={m.url}
                 />
               ) : (
-                <video className="object-contain" key={i} autoPlay controls>
+                <video
+                  className="object-contain w-full h-full"
+                  key={i}
+                  autoPlay
+                  controls
+                >
                   <source src={m.url} type="video/mp4"></source>
                   <track kind="captions"></track>
                 </video>
               )}
-            </div>
+            </Link>
           );
         })}
       </div>

@@ -1,11 +1,15 @@
 import { configureStore } from "@reduxjs/toolkit";
 
 import authSlice from "./feature/auth/authSlice";
+import postSlice from "./feature/post/postSlice";
+import feedSlice from "./feature/feed/feedSlice";
 
 export const makeStore = () => {
   return configureStore({
     reducer: {
       auth: authSlice,
+      post: postSlice,
+      feed: feedSlice,
     },
   });
 };

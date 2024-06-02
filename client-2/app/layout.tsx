@@ -13,14 +13,22 @@ export const metadata: Metadata = {
 
 export default function RootLayout({
   children,
+  media,
+  post,
 }: Readonly<{
   children: React.ReactNode;
+  media: React.ReactNode;
+  post: React.ReactNode;
 }>) {
   return (
     <html lang="en">
       <body className={inter.className}>
         <StoreProvider>
-          <AuthProvider>{children}</AuthProvider>
+          <AuthProvider>
+            {media}
+            {post}
+            {children}
+          </AuthProvider>
         </StoreProvider>
       </body>
     </html>

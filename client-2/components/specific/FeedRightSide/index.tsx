@@ -13,7 +13,7 @@ export default function FeedRightSide({
   return (
     <div {...res}>
       <div className="gap-4 flex flex-col">
-        <StickyArea className="w-full p-2 border-l border-r">
+        <StickyArea className="w-full p-2">
           <div className="flex justify-start items-center">
             <input className="peer bg-gray-200 pl-10 w-full p-2 outline-blue-600 rounded-full pr-4"></input>
             <div className="absolute p-2 peer-focus:text-blue-600">
@@ -42,16 +42,16 @@ export default function FeedRightSide({
           <List
             className="divide-y"
             list={[
-              { top: "haha", mid: "ok", bot: "hmm" },
-              { top: "haha", mid: "ok", bot: "hmm" },
-              { top: "haha", mid: "ok", bot: "hmm" },
-              { top: "haha", mid: "ok", bot: "hmm" },
-              { top: "haha", mid: "ok", bot: "hmm" },
-              { top: "haha", mid: "ok", bot: "hmm" },
-              { top: "haha", mid: "ok", bot: "hmm" },
-              { top: "haha", mid: "ok", bot: "hmm" },
-              { top: "haha", mid: "ok", bot: "hmm" },
-              { top: "haha", mid: "ok", bot: "hmm" },
+              { top: "haha", mid: "ok1", bot: "hmm" },
+              { top: "haha", mid: "ok2", bot: "hmm" },
+              { top: "haha", mid: "ok3", bot: "hmm" },
+              { top: "haha", mid: "ok4", bot: "hmm" },
+              { top: "haha", mid: "ok5", bot: "hmm" },
+              { top: "haha", mid: "ok6", bot: "hmm" },
+              { top: "haha", mid: "ok7", bot: "hmm" },
+              { top: "haha", mid: "ok8", bot: "hmm" },
+              { top: "haha", mid: "ok9", bot: "hmm" },
+              { top: "haha", mid: "ok0", bot: "hmm" },
             ]}
             item={(it) => (
               <HashtagItem

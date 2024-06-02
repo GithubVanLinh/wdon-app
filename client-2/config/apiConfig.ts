@@ -3,6 +3,7 @@ const apiConfig = {
   endpoints: {
     login: "/auth/login",
     register: "/auth/register",
+    createPost: "/posts",
     getPosts: "/posts",
     getPost: (id: string) => `/posts/${id}`,
   },

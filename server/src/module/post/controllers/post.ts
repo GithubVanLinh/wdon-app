@@ -44,14 +44,18 @@ export class PostController {
   ) {
     const listName = [];
     for (const file of files) {
+      const type = file.mimetype;
       const name = saveFileToLocal('./uploads/', file);
-      listName.push(name);
+      listName.push({ name: name, type: type.split('/')[0] });
     }
     const tags = extractTagFromString(createPostDto.content || '');
     try {
       const post = await this.postService.createPost({
         content: createPostDto.content,
-        media: listName.map((name) => ({ type: MediaEnum.IMAGE, url: name })),
+        media: listName.map(({ name, type }) => ({
+          type: type as MediaEnum,
+          url: name,
+        })),
         profile: profileId,
         auth: createPostDto.auth,
         tags: tags,
@@ -71,6 +75,7 @@ export class PostController {
     @Param('postId') postId: string,
   ) {
     const post = await this.postService.getPost(postId);
+    post.media.map((m) => (m.url = getFullMediaUrl(m.url)));
     return post;
 
     // if (post.profile.id === profileId) {

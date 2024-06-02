@@ -1,3 +1,5 @@
+"use client";
+
 import { DivProps } from "@/utils/type/html";
 import Logo from "../Logo";
 import ImageButton from "@/components/common/ImageButton";
@@ -11,58 +13,114 @@ import {
   UserGroupIcon,
   UserIcon,
   XMarkIcon,
-} from "@heroicons/react/24/solid";
+} from "@heroicons/react/24/outline";
 
-export interface FeedLeftSideProps {}
+import {
+  BellIcon as BellIconSolid,
+  CubeIcon as CubeIconSolid,
+  EllipsisHorizontalIcon as EllipsisHorizontalIconSolid,
+  EnvelopeIcon as EnvelopeIconSolid,
+  HomeIcon as HomeIconSolid,
+  MagnifyingGlassIcon as MagnifyingGlassIconSolid,
+  UserGroupIcon as UserGroupIconSolid,
+  UserIcon as UserIconSolid,
+  XMarkIcon as XMarkIconSolid,
+} from "@heroicons/react/24/solid";
+import Button from "@/components/common/Button";
+import UserInfo from "../UserInfo";
+import Link from "next/link";
+import { FeedTab } from "@/lib/feature/feed/feedSlice";
+import SideTab from "./SideTab";
+import { useAppSelector } from "@/lib/hooks";
+
+export interface FeedLeftSideProps {
+  currentTab: FeedTab;
+}
 
 export default function FeedLeftSide({
+  currentTab,
   ...res
 }: Readonly<FeedLeftSideProps & DivProps>) {
+  console.log(currentTab);
   return (
     <div {...res}>
-      <div className="flex flex-col">
-        <div className="flex flex-col gap-2">
+      <div className="flex flex-col justify-between p-2">
+        <div className="flex flex-col">
           <div className="p-2 flex">
             <Logo />
           </div>
-          <ImageButton
-            text="Home"
-            image={<HomeIcon width={30} height={30} />}
+          <SideTab
+            selected={currentTab === "home"}
+            path="/feed"
+            name="Home"
+            icon={<HomeIcon width={30} height={30} />}
+            selectedIcon={<HomeIconSolid width={30} height={30} />}
           />
-          <ImageButton
-            text="Search"
-            image={<MagnifyingGlassIcon width={30} height={30} />}
+          <SideTab
+            selected={currentTab === "search"}
+            path="/search"
+            name="Search"
+            icon={<MagnifyingGlassIcon width={30} height={30} />}
+            selectedIcon={
+              <MagnifyingGlassIcon strokeWidth={2} width={30} height={30} />
+            }
           />
-          <ImageButton
-            text="Notifications"
-            image={<BellIcon width={30} height={30} />}
+          <SideTab
+            selected={currentTab === "notifications"}
+            path="/notifications"
+            name="Notifications"
+            icon={<BellIcon width={30} height={30} />}
           />
-          <ImageButton
-            text="Message"
-            image={<EnvelopeIcon width={30} height={30} />}
+          <SideTab
+            selected={currentTab === "message"}
+            path="/message"
+            name="Message"
+            icon={<EnvelopeIcon width={30} height={30} />}
           />
-          <ImageButton
-            text="Cube"
-            image={<CubeIcon width={30} height={30} />}
+          <SideTab
+            selected={currentTab === "cube"}
+            path="/cube"
+            name="Cube"
+            icon={<CubeIcon width={30} height={30} />}
           />
-          <ImageButton
-            text="Communications"
-            image={<UserGroupIcon width={30} height={30} />}
+          <SideTab
+            selected={currentTab === "communications"}
+            path="/communications"
+            name="Communications"
+            icon={<UserGroupIcon width={30} height={30} />}
           />
           <ImageButton
             text="Premium"
             image={<XMarkIcon width={30} height={30} />}
           />
-          <ImageButton
-            text="Profile"
-            image={<UserIcon width={30} height={30} />}
+          <SideTab
+            selected={currentTab === "profile"}
+            path="/profile"
+            name="Profile"
+            icon={<UserIcon width={30} height={30} />}
           />
           <ImageButton
             text="More"
             image={<EllipsisHorizontalIcon width={30} height={30} />}
           />
+          <Link
+            href="/post"
+            scroll={false}
+            className="hidden lg:flex bg-blue-400 text-lg font-bold text-white p-2 rounded-full text-center justify-center items-center"
+          >
+            Post
+          </Link>
         </div>
-        <div className="flex flex-col"></div>
+        <div className="flex flex-row">
+          <UserInfo
+            user={{
+              dayOfBirth: new Date(),
+              _id: "Something",
+              firstName: "Linh",
+              link: "Chubby",
+            }}
+          />
+        </div>
       </div>
     </div>
   );

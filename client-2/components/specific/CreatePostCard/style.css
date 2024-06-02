@@ -1,0 +1,8 @@
+.hide-bar {
+  scrollbar-width: none;
+}
+
+.hide-bar:hover {
+  scrollbar-width: thin;
+  scrollbar-color: #8a9aec #f0f0f0;
+}

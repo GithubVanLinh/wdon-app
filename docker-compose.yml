@@ -1,24 +1,14 @@
 version: "3.8"
 
 services:
-  mysql1:
-    image: mysql
-    # NOTE: use of "mysql_native_password" is not recommended: https://dev.mysql.com/doc/refman/8.0/en/upgrading-from-previous-series.html#upgrade-caching-sha2-password
-    # (this is just an example, not intended to be a production configuration)
-    command: --default-authentication-plugin=mysql_native_password
-    restart: always
-    environment:
-      MYSQL_ROOT_PASSWORD: example
-      MYSQL_DATABASE: wdon
-      MYSQL_USER: wdon
-      MYSQL_PASSWORD: wdon
-
-  adminer:
-    image: adminer
-    restart: always
+  nginx:
+    image: nginx
+    volumes:
+      - ./templates:/etc/nginx/templates
     ports:
-      - 8080:8080
-
+      - "8080:80"
+    environment:
+      - NGINX_PORT=80
   # mongo
   mongo1:
     image: mongo:7.0
@@ -68,14 +58,3 @@ services:
     volumes:
       - "./opt/databases/mongo3/data:/data/db"
       - "./opt/databases/mongo3/config:/data/configdb"
-
-  mongo-express:
-    image: mongo-express
-    restart: always
-    ports:
-      - 8081:8081
-    environment:
-      ME_CONFIG_MONGODB_ADMINUSERNAME: root
-      ME_CONFIG_MONGODB_ADMINPASSWORD: example
-      ME_CONFIG_MONGODB_URL: mongodb://mongo1:27017,mongo2:27018,mongo3:27019/?replicaSet=rs0
-      ME_CONFIG_BASICAUTH: false

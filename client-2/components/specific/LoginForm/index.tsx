@@ -6,6 +6,7 @@ import { useAppDispatch } from "@/lib/hooks";
 import { login } from "@/services/authService";
 import { UserCircleIcon } from "@heroicons/react/24/solid";
 import { LockClosedIcon } from "@heroicons/react/24/solid";
+import { AxiosError } from "axios";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 
@@ -31,11 +32,19 @@ export default function LoginForm({}: Readonly<LoginFormProps>) {
       dispatch(setToken(res.access_token));
       router.replace("/feed");
     } catch (error) {
-      setData({
-        error: "username or password is wrongs",
-        username: data.username,
-        password: "",
-      });
+      if (error instanceof AxiosError) {
+        setData({
+          error: error.message,
+          username: data.username,
+          password: "",
+        });
+      } else {
+        setData({
+          error: "Something went wrong",
+          username: data.username,
+          password: "",
+        });
+      }
     } finally {
       setLoading(false);
     }

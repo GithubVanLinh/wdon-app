@@ -5,7 +5,6 @@ export interface Post {
   media: Media[];
   auth: string;
   tags: any[];
-  __v: number;
 }
 
 export interface Media {
@@ -21,6 +20,7 @@ export enum MediaType {
 export interface Profile {
   _id: string;
   dayOfBirth: Date;
-  __v: number;
   link: string;
+  firstName: string;
+  lastName?: string;
 }

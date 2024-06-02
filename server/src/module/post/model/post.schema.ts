@@ -2,6 +2,7 @@ import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument } from 'mongoose';
 import { ProfileDocument } from '../../user/model/profile.schema';
 import { Tag } from './tag.schema';
+import { BaseSchema } from 'src/schema/base.schema';
 
 export enum MediaEnum {
   VIDEO = 'video',
@@ -11,7 +12,8 @@ export enum MediaEnum {
 
 export enum PostAuthEnum {
   ONLY_ME = 'only',
-  FRIENDS = 'friends',
+  FRIENDS = 'friend',
+  FOLLOWER = 'follower',
   ANYONE = 'anyone',
 }
 
@@ -21,7 +23,7 @@ export class Media {
 }
 
 @Schema()
-export class Post {
+export class Post extends BaseSchema {
   @Prop({ type: mongoose.Schema.Types.ObjectId, ref: 'Profile' })
   profile: ProfileDocument;
 
@@ -40,3 +42,9 @@ export class Post {
 
 export type PostDocument = HydratedDocument<Post>;
 export const PostSchema = SchemaFactory.createForClass(Post);
+PostSchema.pre('save', function (next) {
+  const date = new Date();
+  this.updatedAt = date;
+  this.createdAt = date;
+  next();
+});

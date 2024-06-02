@@ -41,7 +41,6 @@ export class PostService {
 
   async getPost(postId: string) {
     const post = await this.postModel.findById(postId).populate('profile');
-    post.media.map((p) => (p.url = getFullMediaUrl(p.url)));
     return post;
   }
 

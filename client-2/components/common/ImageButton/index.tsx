@@ -1,10 +1,11 @@
 import Link from "next/link";
 import Avatar from "../Avatar";
-import { ReactNode } from "react";
+import { MouseEventHandler, ReactNode } from "react";
+import { DivProps } from "@/utils/type/html";
 
 export interface ImageButtonProps {
   href?: string;
-  onClick?: () => void;
+  onClick?: MouseEventHandler<HTMLButtonElement>;
   image: ReactNode;
   text?: string;
 }
@@ -14,21 +15,24 @@ export default function ImageButton({
   href,
   onClick,
   text,
-}: Readonly<ImageButtonProps>) {
-  const className =
-    "flex flex-row gap-4 p-2 items-center hover:bg-gray-300 rounded-full w-fit";
+  ...res
+}: Readonly<ImageButtonProps & DivProps>) {
+  const className = [
+    "flex flex-row gap-4 p-2 items-center hover:bg-gray-300 rounded-full w-fit",
+    res.className,
+  ];
   if (href) {
     return (
-      <Link href={href} className={className}>
+      <Link href={href} className={className.join(" ")}>
         {image}
-        {text && <b className="text-xl hidden xl:flex">{text}</b>}
+        {text && <span className="text-xl hidden xl:flex">{text}</span>}
       </Link>
     );
   }
   return (
-    <button onClick={onClick} className={className}>
+    <button onClick={onClick} className={className.join(" ")} type="button">
       {image}
-      {text && <b className="text-xl hidden xl:flex">{text}</b>}
+      {text && <span className="text-xl hidden xl:flex">{text}</span>}
     </button>
   );
 }

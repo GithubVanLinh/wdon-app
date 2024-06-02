@@ -1,29 +1,46 @@
 "use client";
 
 import CenteredElement from "@/components/common/CenteredElement";
+import Loading from "@/components/common/Loading";
 import StickyArea from "@/components/common/StickyArea";
 import CreatePostForm from "@/components/specific/CreatePostForm";
 import PostCard from "@/components/specific/PostCard";
+import { setPosts } from "@/lib/feature/post/postSlice";
+import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { getPosts } from "@/services/postService";
 import { Post } from "@/utils/type/post";
+import { AxiosError } from "axios";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 
 export interface PageProps {}
 
 export default function Page({}: Readonly<PageProps>) {
-  const [listPost, setListPost] = useState<Array<Post>>([]);
+  const posts = useAppSelector((state) => state.post.posts);
+  const [error, setError] = useState<AxiosError>();
+  const dispatch = useAppDispatch();
+  const router = useRouter();
 
   useEffect(() => {
     const fetchData = async () => {
-      const data = await getPosts();
-      setListPost(data);
+      try {
+        const data = await getPosts();
+        dispatch(setPosts(data));
+      } catch (error) {
+        console.log(error);
+        setError(error as AxiosError);
+      }
     };
     fetchData();
-  }, []);
+  }, [dispatch]);
+
+  if (error) {
+    return <div className="text-red-600">{error.message}</div>;
+  }
 
   return (
-    <div className="flex grow flex-col border-r border-l border-gray-200">
-      <StickyArea className="flex flex-row w-full justify-center items-center divide-x border-b">
+    <div className="flex grow flex-col border-gray-100 border-r border-l">
+      <StickyArea className="flex flex-row w-full justify-center items-center divide-gray-100 divide-x border-b border-gray-100">
         <CenteredElement>
           <div className="py-4">For you</div>
         </CenteredElement>
@@ -31,11 +48,22 @@ export default function Page({}: Readonly<PageProps>) {
           <div className="py-4s">Following</div>
         </CenteredElement>
       </StickyArea>
-      <div className="grow divide-y">
+      <div className="grow divide-y divide-gray-100">
         <CreatePostForm />
-        {listPost.map((it) => (
-          <PostCard key={it._id} post={it} />
-        ))}
+
+        {posts ? (
+          posts.map((it) => (
+            <PostCard
+              onClick={() => {
+                router.push(`/${it.profile._id}/status/${it._id}`);
+              }}
+              key={it._id}
+              post={it}
+            />
+          ))
+        ) : (
+          <Loading text="Loading..." />
+        )}
       </div>
     </div>
   );
