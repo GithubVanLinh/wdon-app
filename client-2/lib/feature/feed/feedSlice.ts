@@ -20,8 +20,23 @@ export const feedSlice = createSlice({
   name: "auth",
   initialState: initValue,
   reducers: {
-    setTab: (state, action: PayloadAction<FeedTab>) => {
-      state.currentTab = action.payload;
+    setTab: (state, action: PayloadAction<string>) => {
+      switch (action.payload) {
+        case "feed":
+          state.currentTab = "home";
+          break;
+        case "search":
+        case "notifications":
+        case "message":
+        case "cube":
+        case "communications":
+        case "profile":
+          state.currentTab = action.payload;
+          break;
+        default:
+          state.currentTab = "home";
+          break;
+      }
     },
   },
 });

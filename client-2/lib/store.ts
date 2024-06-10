@@ -3,6 +3,7 @@ import { configureStore } from "@reduxjs/toolkit";
 import authSlice from "./feature/auth/authSlice";
 import postSlice from "./feature/post/postSlice";
 import feedSlice from "./feature/feed/feedSlice";
+import messageSlice from "./feature/message/messageSlice";
 
 export const makeStore = () => {
   return configureStore({
@@ -10,6 +11,7 @@ export const makeStore = () => {
       auth: authSlice,
       post: postSlice,
       feed: feedSlice,
+      message: messageSlice,
     },
   });
 };

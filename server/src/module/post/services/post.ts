@@ -4,7 +4,6 @@ import { Model } from 'mongoose';
 import { Post } from '../model/post.schema';
 import { CreatePostDto } from '../dto/create-post.dto';
 import { TagService } from './tag';
-import { getFullMediaUrl } from 'src/utils/url';
 
 @Injectable()
 export class PostService {

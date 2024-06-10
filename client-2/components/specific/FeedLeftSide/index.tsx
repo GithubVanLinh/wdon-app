@@ -75,6 +75,9 @@ export default function FeedLeftSide({
             selected={currentTab === "message"}
             path="/message"
             name="Message"
+            selectedIcon={
+              <EnvelopeIconSolid strokeWidth={2} width={30} height={30} />
+            }
             icon={<EnvelopeIcon width={30} height={30} />}
           />
           <SideTab

@@ -4,6 +4,8 @@ import CenteredElement from "@/components/common/CenteredElement";
 import Loading from "@/components/common/Loading";
 import apiConfig from "@/config/apiConfig";
 import { setToken } from "@/lib/feature/auth/authSlice";
+import { setTab } from "@/lib/feature/feed/feedSlice";
+import { setCurrent } from "@/lib/feature/message/messageSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import axios, { AxiosInstance } from "axios";
 import { usePathname, useRouter } from "next/navigation";
@@ -25,6 +27,13 @@ export default function AuthProvider({
   const stateToken = useAppSelector((state) => state.auth.token);
   const [loading, setLoading] = useState(true);
   const pathname = usePathname();
+  const rootRouter = pathname.split("/")[1];
+  useEffect(() => {
+    if (rootRouter) {
+      console.log("current", rootRouter);
+      dispatch(setTab(rootRouter));
+    }
+  }, [dispatch, rootRouter]);
   useEffect(() => {
     if (!stateToken) {
       console.log("in auth: setToken");
@@ -38,7 +47,7 @@ export default function AuthProvider({
         router.push("/login");
       }
     }
-  }, [dispatch, pathname, stateToken]);
+  }, [router, dispatch, pathname, stateToken]);
 
   if (loading) {
     return (

@@ -10,7 +10,6 @@ import {
 } from '@nestjs/common';
 import { FilesInterceptor } from '@nestjs/platform-express';
 
-import { deleteFileFromLocal, saveFileToLocal } from 'wd-type-utilities';
 import { CreatePostDto } from '../dto/create-post.dto';
 import { ProfileId } from 'src/module/auth/decorators/user';
 import { PostService } from '../services/post';
@@ -19,6 +18,7 @@ import { extractTagFromString } from 'src/utils/string';
 import { FriendService } from 'src/module/communication/service';
 import { Public } from 'src/module/auth/decorators/public';
 import { getFullMediaUrl } from 'src/utils/url';
+import { deleteFileFromLocal, saveFileToLocal } from 'src/utils';
 
 const MIMETYPE = ['image/png', 'image/jpeg', 'video/mp4'];
 

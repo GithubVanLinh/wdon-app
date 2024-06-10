@@ -6,6 +6,7 @@ import { APP_GUARD } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/guard/jwt';
 import { UserModule } from './user/module';
 import { PostModule } from './post/module';
+import { SocketModule } from './socket/module';
 
 @Module({
   imports: [
@@ -14,6 +15,7 @@ import { PostModule } from './post/module';
     AuthModule,
     UserModule,
     PostModule,
+    SocketModule,
   ],
   controllers: [],
   providers: [

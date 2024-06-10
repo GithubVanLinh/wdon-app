@@ -5,6 +5,7 @@ import { ValidationPipe } from '@nestjs/common';
 import { TransformInterceptor } from './module/transform.intercepter';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import * as path from 'path';
+import { RedisIoAdapter } from './RedisAdapter';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -23,6 +24,12 @@ async function bootstrap() {
     }),
   );
   app.useGlobalInterceptors(new TransformInterceptor());
+
+  const redisIoAdapter = new RedisIoAdapter(app);
+  await redisIoAdapter.connectToRedis();
+
+  app.useWebSocketAdapter(redisIoAdapter);
+
   await app.listen(3001);
 }
 bootstrap();

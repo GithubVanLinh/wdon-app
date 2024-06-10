@@ -40,7 +40,7 @@ export default function Page({}: Readonly<PageProps>) {
 
   return (
     <div className="flex grow flex-col border-gray-100 border-r border-l">
-      <StickyArea className="flex flex-row w-full justify-center items-center divide-gray-100 divide-x border-b border-gray-100">
+      <StickyArea className="flex flex-row w-full justify-center items-center divide-gray-100 divide-x border-b border-gray-100 bg-white">
         <CenteredElement>
           <div className="py-4">For you</div>
         </CenteredElement>

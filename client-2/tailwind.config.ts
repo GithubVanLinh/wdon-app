@@ -18,6 +18,9 @@ const config: Config = {
         3: "3",
         4: "4",
       },
+      maxWidth: {
+        "7/10": "70%",
+      },
       transitionProperty: {
         height: "height",
         spacing: "margin, padding",
