@@ -1,6 +1,6 @@
 import { authInstance } from "@/app/AuthProvider";
 import apiConfig from "@/config/apiConfig";
-import axios, { AxiosRequestConfig } from "axios";
+import axios, { AxiosError, AxiosRequestConfig } from "axios";
 
 const apiRequest = () => {
   const instance =
@@ -18,7 +18,13 @@ const post = async (
   data: any,
   options: AxiosRequestConfig = {}
 ) => {
-  return (await apiRequest().post(endpoint, data, options)).data;
+  try {
+    return (await apiRequest().post(endpoint, data, options)).data;
+  } catch (error) {
+    if (error instanceof AxiosError) {
+      throw error;
+    }
+  }
 };
 
 const put = async (

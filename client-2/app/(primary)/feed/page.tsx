@@ -17,6 +17,7 @@ export interface PageProps {}
 
 export default function Page({}: Readonly<PageProps>) {
   const posts = useAppSelector((state) => state.post.posts);
+  const profile = useAppSelector((state) => state.auth.profile);
   const [error, setError] = useState<AxiosError>();
   const dispatch = useAppDispatch();
   const router = useRouter();
@@ -49,7 +50,7 @@ export default function Page({}: Readonly<PageProps>) {
         </CenteredElement>
       </StickyArea>
       <div className="grow divide-y divide-gray-100">
-        <CreatePostForm />
+        <CreatePostForm avatar={profile?.avatar} />
 
         {posts ? (
           posts.map((it) => (

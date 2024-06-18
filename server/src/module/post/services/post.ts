@@ -1,9 +1,10 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Model } from 'mongoose';
+import { FilterQuery, Model } from 'mongoose';
 import { Post } from '../model/post.schema';
 import { CreatePostDto } from '../dto/create-post.dto';
 import { TagService } from './tag';
+import { GetPostsDto } from '../dto/get-post.dt';
 
 @Injectable()
 export class PostService {
@@ -44,8 +45,16 @@ export class PostService {
   }
 
   //TODO
-  async getPosts() {
-    const posts = await this.postModel.find({}).populate('profile');
+  async getPosts({ profileId }: GetPostsDto = {}) {
+    console.log(profileId);
+    const condition: FilterQuery<Post> = {};
+    if (profileId) {
+      condition.profile = profileId;
+    }
+    const posts = await this.postModel
+      .find(condition)
+      .sort({ createdAt: -1 })
+      .populate('profile');
     return posts;
   }
 }

@@ -6,10 +6,20 @@ import { TransformInterceptor } from './module/transform.intercepter';
 import { NestExpressApplication } from '@nestjs/platform-express';
 import * as path from 'path';
 import { RedisIoAdapter } from './RedisAdapter';
+import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
 
+  const config = new DocumentBuilder()
+    .setTitle('WDon Api')
+    .setDescription('API description')
+    .setVersion('1.0')
+    .addBearerAuth()
+    .build();
+
+  const document = SwaggerModule.createDocument(app, config);
+  SwaggerModule.setup('api', app, document);
   app.enableCors();
   const httpAdapterHost = app.get(HttpAdapterHost);
   app.useGlobalFilters(new AllExceptionsFilter(httpAdapterHost));

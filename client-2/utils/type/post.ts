@@ -5,6 +5,8 @@ export interface Post {
   media: Media[];
   auth: string;
   tags: any[];
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Media {
@@ -19,8 +21,12 @@ export enum MediaType {
 
 export interface Profile {
   _id: string;
-  dayOfBirth: Date;
+  dayOfBirth: string;
   link: string;
   firstName: string;
   lastName?: string;
+  avatar: string;
+  background: string;
+  createdAt: string;
+  updatedAt: string;
 }

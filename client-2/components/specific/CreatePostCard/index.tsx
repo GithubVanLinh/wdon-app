@@ -20,8 +20,12 @@ import "./style.css";
 import Button from "@/components/common/Button";
 import { MIMEType } from "util";
 import { createPost } from "@/services/postService";
+import { useAppDispatch } from "@/lib/hooks";
+import { hideNotify, showNotify } from "@/lib/feature/app/appSlice";
 
-export interface CreatePostFormProps {}
+export interface CreatePostFormProps {
+  avatar: string;
+}
 
 type PostCreateData = {
   files?: File[];
@@ -30,10 +34,13 @@ type PostCreateData = {
 };
 
 export default function CreatePostForm({
+  avatar,
   ...res
 }: Readonly<CreatePostFormProps & DivProps>) {
   const router = useRouter();
   const imageRef = useRef(null);
+
+  const dispatch = useAppDispatch();
 
   const [postData, setPostData] = useState<PostCreateData>({
     auth: "friend",
@@ -105,6 +112,12 @@ export default function CreatePostForm({
     e.preventDefault();
 
     const response = await createPost(postData);
+
+    dispatch(showNotify("uploaded"));
+    setTimeout(() => {
+      console.log("hide");
+      dispatch(hideNotify());
+    }, 3000);
     console.log(response);
     router.back();
   };
@@ -144,7 +157,7 @@ export default function CreatePostForm({
   function inputPart() {
     return (
       <div className="flex flex-row gap-2 w-full">
-        <Avatar src="https://pbs.twimg.com/media/GOo9dIpa0AEziVK?format=jpg&name=large" />
+        <Avatar src={avatar} />
         <div className="flex flex-col w-full">
           <textarea
             value={postData.content}

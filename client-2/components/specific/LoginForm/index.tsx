@@ -1,9 +1,10 @@
 "use client";
 
 import Button from "@/components/common/Button";
-import { setToken } from "@/lib/feature/auth/authSlice";
+import { setProfile, setToken } from "@/lib/feature/auth/authSlice";
 import { useAppDispatch } from "@/lib/hooks";
 import { login } from "@/services/authService";
+import { getProfile } from "@/services/userService";
 import { UserCircleIcon } from "@heroicons/react/24/solid";
 import { LockClosedIcon } from "@heroicons/react/24/solid";
 import { AxiosError } from "axios";
@@ -27,9 +28,12 @@ export default function LoginForm({}: Readonly<LoginFormProps>) {
     setLoading(true);
     try {
       const res = await login(data.username, data.password);
-      console.log(res);
+      const profile = await getProfile(res.access_token);
+      console.log("profile", profile);
+      localStorage.setItem("profile", JSON.stringify(profile));
       localStorage.setItem("token", res.access_token);
       dispatch(setToken(res.access_token));
+      dispatch(setProfile(profile));
       router.replace("/feed");
     } catch (error) {
       if (error instanceof AxiosError) {
@@ -52,7 +56,7 @@ export default function LoginForm({}: Readonly<LoginFormProps>) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="flex flex-col gap-3 p-4 bg-gradient-to-r from-sky-500 to-indigo-500 rounded-lg"
+      className="flex flex-col gap-3 p-4 border py-10 px-4"
     >
       <div className="w-full text-center font-bold text-xl">Login</div>
       <div className="relative">
@@ -88,7 +92,7 @@ export default function LoginForm({}: Readonly<LoginFormProps>) {
       {data.error && <div className="text-red-600">{data.error}</div>}
       <Button
         type="submit"
-        className="text-white hover:bg-blue-600 transition-colors duration-500 bg-blue-400"
+        className="text-white hover:bg-blue-600 transition-colors duration-500 bg-blue-400 font-bold text-lg"
         loading={loading}
       >
         Login

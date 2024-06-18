@@ -4,7 +4,7 @@ import {
   Get,
   Param,
   Post,
-  UnauthorizedException,
+  Query,
   UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
@@ -13,21 +13,30 @@ import { FilesInterceptor } from '@nestjs/platform-express';
 import { CreatePostDto } from '../dto/create-post.dto';
 import { ProfileId } from 'src/module/auth/decorators/user';
 import { PostService } from '../services/post';
-import { MediaEnum, PostAuthEnum } from '../model/post.schema';
+import { MediaEnum } from '../model/post.schema';
 import { extractTagFromString } from 'src/utils/string';
 import { FriendService } from 'src/module/communication/service';
-import { Public } from 'src/module/auth/decorators/public';
 import { getFullMediaUrl } from 'src/utils/url';
 import { deleteFileFromLocal, saveFileToLocal } from 'src/utils';
+import { PostGateway } from '../gateway';
+import { ApiTags } from '@nestjs/swagger';
+import { GetPostsDto } from '../dto/get-post.dt';
 
 const MIMETYPE = ['image/png', 'image/jpeg', 'video/mp4'];
 
 @Controller('posts')
+@ApiTags('Post')
 export class PostController {
   constructor(
     private postService: PostService,
     private friendService: FriendService,
+    private postGateway: PostGateway,
   ) {}
+
+  @Post('/test')
+  async test() {
+    this.postGateway.sendAll();
+  }
 
   @Post()
   @UseInterceptors(
@@ -105,8 +114,8 @@ export class PostController {
 
   //TODO
   @Get('/')
-  async getPosts() {
-    const posts = await this.postService.getPosts();
+  async getPosts(@Query() { profileId }: GetPostsDto) {
+    const posts = await this.postService.getPosts({ profileId: profileId });
     posts.map((p) => p.media.map((m) => (m.url = getFullMediaUrl(m.url))));
     return posts;
   }

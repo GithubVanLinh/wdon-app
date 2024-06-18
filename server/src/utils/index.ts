@@ -26,13 +26,19 @@ export function saveFileToLocal(
     randomString(5) +
     Date.now().toString() +
     getExtFromMIME(file.mimetype as AllowMimeType);
-  const realPath = path.join(folderPath, name);
+  const folderName = path.join(process.cwd(), folderPath);
+  console.log(folderName);
+  if (!fs.existsSync(folderName)) {
+    fs.mkdirSync(folderName);
+  }
+  const realPath = path.join(folderName, name);
   fs.writeFileSync(realPath, file.buffer);
   return name;
 }
 
-export function deleteFileFromLocal(path: string) {
-  fs.unlinkSync(path);
+export function deleteFileFromLocal(spath: string) {
+  const realPath = path.join(process.cwd(), spath);
+  fs.unlinkSync(realPath);
 }
 
 // export function saveFilesToLocal(

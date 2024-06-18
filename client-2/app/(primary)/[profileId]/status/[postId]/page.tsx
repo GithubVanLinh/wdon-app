@@ -51,7 +51,7 @@ export default function Page({
   }
   return (
     <div className="border-l border-r w-full">
-      <StickyArea className="p-2 border-b">
+      <StickyArea className="p-2 border-b  bg-white">
         <div className="flex flex-row justify-start items-center gap-4">
           <ImageButton
             onClick={() => {

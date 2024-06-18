@@ -29,9 +29,9 @@ export default function SideTab({
     <ImageButton
       className={className}
       onClick={() => {
+        dispatch(setTab(name.toLowerCase() as FeedTab));
+        router.push(path);
         if (!selected) {
-          dispatch(setTab(name.toLowerCase() as FeedTab));
-          router.push(path);
         }
       }}
       text={name}

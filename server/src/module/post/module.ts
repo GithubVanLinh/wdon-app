@@ -6,6 +6,7 @@ import { Post, PostSchema } from './model/post.schema';
 import { PostService } from './services/post';
 import { TagService } from './services/tag';
 import { CommunicationModule } from '../communication/module';
+import { PostGateway } from './gateway';
 
 @Module({
   imports: [
@@ -16,7 +17,7 @@ import { CommunicationModule } from '../communication/module';
     CommunicationModule,
   ],
   controllers: [PostController],
-  providers: [PostService, TagService],
+  providers: [PostService, TagService, PostGateway],
   exports: [],
 })
 export class PostModule {}

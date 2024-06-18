@@ -4,7 +4,7 @@ import { CreateUserDto } from './dto/create';
 import { Injectable } from '@nestjs/common';
 import { AuthService } from '../auth/service';
 import { AuthType } from '../auth/model/auth.schema';
-import { Model, ObjectId } from 'mongoose';
+import { ClientSession, Model, ObjectId } from 'mongoose';
 import { Profile } from './model/profile.schema';
 
 @Injectable()
@@ -15,16 +15,18 @@ export class UserService {
     private authService: AuthService,
   ) {}
 
-  async getProfileById(profile_id: string) {
-    const profile = await this.profileModel.findById(profile_id);
+  async getProfileById(profile_id: string, opt?: { session?: ClientSession }) {
+    const profile = await this.profileModel.findById(profile_id, null, {
+      session: opt?.session,
+    });
     return profile;
   }
 
   async createUser(
     create: CreateUserDto &
       (
-        | Required<Omit<CreateUserDto, 'username' | 'password' | 'dayOfBirth'>>
-        | Required<Omit<CreateUserDto, 'token' | 'dayOfBirth'>>
+        | Required<Omit<CreateUserDto, 'username' | 'password' | 'dateOfBirth'>>
+        | Required<Omit<CreateUserDto, 'token' | 'dateOfBirth'>>
       ),
   ) {
     const session = await this.userModel.startSession();
@@ -32,9 +34,10 @@ export class UserService {
     try {
       const opt = { session };
       const profile = await new this.profileModel({
-        dayOfBirth: create.dayOfBirth,
+        dayOfBirth: create.dateOfBirth,
         firstName: create.firstName,
         lastName: create.lastName,
+        avatar: create.avatar,
       }).save(opt);
       const user = await new this.userModel({
         profile: profile,

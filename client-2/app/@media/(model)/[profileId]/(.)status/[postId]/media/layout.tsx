@@ -22,7 +22,7 @@ export default function Layout({
 }: Readonly<LayoutProps>) {
   const { data, error, loading } = useService(getPost, postId);
 
-  console.log(data);
+  console.log("data layout", data);
   if (loading) return <Loading text="Loading.." />;
   if (error) return <p>Error: {error.message}</p>;
 

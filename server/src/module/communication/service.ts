@@ -1,11 +1,15 @@
-import { Injectable } from '@nestjs/common';
+import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
 import { Friend, FriendTypeEnum } from './models/friends';
 import { Model } from 'mongoose';
+import { UserService } from '../user/service';
 
 @Injectable()
 export class FriendService {
-  constructor(@InjectModel(Friend.name) private friendModel: Model<Friend>) {}
+  constructor(
+    @InjectModel(Friend.name) private friendModel: Model<Friend>,
+    private userService: UserService,
+  ) {}
 
   async getRequest(id: string) {
     return await this.friendModel.findById(id);
@@ -26,14 +30,23 @@ export class FriendService {
       friend_id: targetProfileId,
       friendType: FriendTypeEnum.PENDING,
     });
-    const newFriendRequest = await new this.friendModel({
-      profile_id: profileId,
-      friend_id: targetProfileId,
-      friendType: FriendTypeEnum.PENDING,
-    }).save();
 
-    console.log('new', newFriendRequest);
-    return newFriendRequest;
+    const yourProfile = await this.userService.getProfileById(profileId);
+    try {
+      const targetProfile =
+        await this.userService.getProfileById(targetProfileId);
+
+      const newFriendRequest = await new this.friendModel({
+        profile: yourProfile,
+        friend: targetProfile,
+        friendType: FriendTypeEnum.PENDING,
+      }).save();
+
+      console.log('new', newFriendRequest);
+      return newFriendRequest;
+    } catch (error) {
+      throw new BadRequestException('target id not found');
+    }
   }
 
   async updateFriend(friendId: string, friendType: FriendTypeEnum) {
@@ -43,9 +56,19 @@ export class FriendService {
       const friend = await this.friendModel.findById(friendId);
       friend.friendType = friendType;
       await friend.save({ session });
+      const friendProfile = await this.userService.getProfileById(
+        friend.friend.id,
+        {
+          session,
+        },
+      );
+      const yourProfile = await this.userService.getProfileById(
+        friend.profile.id,
+        { session: session },
+      );
       const newFriend = await new this.friendModel({
-        profile_id: friend.friend_id,
-        friend_id: friend.profile_id,
+        profile: friendProfile,
+        friend_id: yourProfile,
         friendType: FriendTypeEnum.FRIEND,
       }).save({ session });
       await session.commitTransaction();
@@ -66,5 +89,20 @@ export class FriendService {
     });
 
     return !!friend;
+  }
+
+  async getListFriends(
+    profileId: string,
+    friendType: FriendTypeEnum = FriendTypeEnum.FRIEND,
+  ) {
+    console.log(profileId, friendType);
+    const friends = await this.friendModel
+      .find({
+        profile: profileId,
+        friendType: friendType,
+      })
+      .populate('friend');
+
+    return friends;
   }
 }

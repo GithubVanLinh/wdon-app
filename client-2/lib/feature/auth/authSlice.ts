@@ -1,10 +1,12 @@
 import { authInstance } from "@/app/AuthProvider";
 import apiConfig from "@/config/apiConfig";
+import { Profile } from "@/utils/type/post";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 import axios from "axios";
 
 type AuthSlice = {
   token?: string;
+  profile?: Profile;
 };
 
 const initValue: AuthSlice = {
@@ -26,10 +28,17 @@ export const authSlice = createSlice({
         },
       });
     },
+    logout: (state) => {
+      state.token = undefined;
+      authInstance.axios = undefined;
+    },
+    setProfile: (state, action: PayloadAction<Profile>) => {
+      state.profile = action.payload;
+    },
   },
 });
 
 // Action creators are generated for each case reducer function
-export const { setToken } = authSlice.actions;
+export const { setToken, setProfile, logout } = authSlice.actions;
 
 export default authSlice.reducer;

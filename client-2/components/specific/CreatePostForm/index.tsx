@@ -1,5 +1,6 @@
 import Avatar from "@/components/common/Avatar";
 import Button from "@/components/common/Button";
+import { BASE_AVATAR_URL } from "@/utils/const";
 import {
   CalendarIcon,
   FaceSmileIcon,
@@ -10,14 +11,18 @@ import {
 } from "@heroicons/react/24/outline";
 import { ReactNode } from "react";
 
-export interface CreatePostFormProps {}
+export interface CreatePostFormProps {
+  avatar?: string;
+}
 
-export default function CreatePostForm({}: Readonly<CreatePostFormProps>) {
+export default function CreatePostForm({
+  avatar,
+}: Readonly<CreatePostFormProps>) {
   return (
     <div className="">
       <div className="flex flex-row gap-2 pt-4 pl-4">
         <div className="flex grow-0 shrink-0 basis-auto">
-          <Avatar src="https://pbs.twimg.com/media/GOg9e2taMAAgya-?format=jpg&name=medium" />
+          <Avatar src={avatar || BASE_AVATAR_URL} />
         </div>
         <div className="flex flex-col grow shrink basis-0 min-w-0 divide-y divide-gray-100">
           {mainInput()}

@@ -13,10 +13,10 @@ export default function Layout({ children }: Readonly<LayoutProps>) {
   return (
     <div className="">
       <div className="flex flex-row justify-between">
-        <div className="hidden sm:flex bg-white relative sticky top-0 basis-0 grow shrink h-screen flex-end">
+        <div className="hidden sm:flex sm:flex-row bg-white sticky top-0 basis-0 grow shrink h-screen justify-end">
           <FeedLeftSide
             currentTab={currentTabState}
-            className="flex absolute top-0 left-1/4 h-full grow shrink "
+            className="flex w-10/12 h-full"
           />
         </div>
         <div className="flex grow-3 shrink basis-0 gap-6">{children}</div>

@@ -4,6 +4,7 @@ import authSlice from "./feature/auth/authSlice";
 import postSlice from "./feature/post/postSlice";
 import feedSlice from "./feature/feed/feedSlice";
 import messageSlice from "./feature/message/messageSlice";
+import appSlice from "./feature/app/appSlice";
 
 export const makeStore = () => {
   return configureStore({
@@ -12,6 +13,7 @@ export const makeStore = () => {
       post: postSlice,
       feed: feedSlice,
       message: messageSlice,
+      app: appSlice,
     },
   });
 };

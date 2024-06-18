@@ -3,10 +3,11 @@
 import CenteredElement from "@/components/common/CenteredElement";
 import Loading from "@/components/common/Loading";
 import apiConfig from "@/config/apiConfig";
-import { setToken } from "@/lib/feature/auth/authSlice";
+import { setProfile, setToken } from "@/lib/feature/auth/authSlice";
 import { setTab } from "@/lib/feature/feed/feedSlice";
 import { setCurrent } from "@/lib/feature/message/messageSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
+import { Profile } from "@/utils/type/post";
 import axios, { AxiosInstance } from "axios";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
@@ -17,11 +18,12 @@ export interface AuthProviderProps {
 
 export const authInstance: { axios?: AxiosInstance } = {};
 
-const whiteList = ["/login", "/"];
+const whiteList = ["/auth/login", "/auth/register", "/"];
 
 export default function AuthProvider({
   children,
 }: Readonly<AuthProviderProps>) {
+  const notify = useAppSelector((state) => state.app.notify);
   const router = useRouter();
   const dispatch = useAppDispatch();
   const stateToken = useAppSelector((state) => state.auth.token);
@@ -38,13 +40,16 @@ export default function AuthProvider({
     if (!stateToken) {
       console.log("in auth: setToken");
       const token = localStorage.getItem("token");
-      if (token) {
+      const strProfile = localStorage.getItem("profile");
+      if (token && strProfile) {
+        const profile = JSON.parse(strProfile) as Profile;
         dispatch(setToken(token));
+        dispatch(setProfile(profile));
         setLoading(false);
       } else if (whiteList.includes(pathname)) {
         setLoading(false);
       } else {
-        router.push("/login");
+        router.push("/auth/login");
       }
     }
   }, [router, dispatch, pathname, stateToken]);
@@ -56,5 +61,14 @@ export default function AuthProvider({
       </CenteredElement>
     );
   }
-  return <div>{children}</div>;
+  return (
+    <div>
+      {notify && (
+        <div className="fixed border bg-blue-300 flex justify-center items-center rounded-full bottom-2 right-2 z-50 w-1/6 h-20">
+          notify
+        </div>
+      )}
+      {children}
+    </div>
+  );
 }

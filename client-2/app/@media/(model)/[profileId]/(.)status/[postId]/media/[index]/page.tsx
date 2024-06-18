@@ -23,6 +23,7 @@ export default function Page({
   params: { profileId, postId, index },
 }: Readonly<PageProps>) {
   const { data, error, loading } = useService(getPost, postId);
+  console.log("image data", data);
   const pathname = usePathname();
   useEffect(() => {
     window.document.body.style.overflow = "hidden";

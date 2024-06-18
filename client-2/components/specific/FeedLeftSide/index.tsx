@@ -32,6 +32,7 @@ import Link from "next/link";
 import { FeedTab } from "@/lib/feature/feed/feedSlice";
 import SideTab from "./SideTab";
 import { useAppSelector } from "@/lib/hooks";
+import { useProfile } from "@/hooks/useProfile";
 
 export interface FeedLeftSideProps {
   currentTab: FeedTab;
@@ -41,10 +42,12 @@ export default function FeedLeftSide({
   currentTab,
   ...res
 }: Readonly<FeedLeftSideProps & DivProps>) {
-  console.log(currentTab);
+  const [profile, errorLoad] = useProfile();
+
+  console.log(profile);
   return (
     <div {...res}>
-      <div className="flex flex-col justify-between p-2">
+      <div className="flex flex-col justify-between p-2 min-w-0">
         <div className="flex flex-col">
           <div className="p-2 flex">
             <Logo />
@@ -115,14 +118,7 @@ export default function FeedLeftSide({
           </Link>
         </div>
         <div className="flex flex-row">
-          <UserInfo
-            user={{
-              dayOfBirth: new Date(),
-              _id: "Something",
-              firstName: "Linh",
-              link: "Chubby",
-            }}
-          />
+          {profile && <UserInfo user={profile} />}
         </div>
       </div>
     </div>

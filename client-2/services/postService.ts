@@ -2,9 +2,16 @@ import apiConfig from "@/config/apiConfig";
 import { get, post } from "@/utils/api";
 import { ApiResponse } from "@/utils/type/api";
 import { Post } from "@/utils/type/post";
+import { AxiosRequestConfig } from "axios";
 
-const getPosts = async (): Promise<Array<Post>> => {
-  const data = await get(apiConfig.endpoints.getPosts);
+const getPosts = async (profileId?: string): Promise<Array<Post>> => {
+  const config: AxiosRequestConfig<any> = {};
+  if (profileId) {
+    config.params = {
+      profileId,
+    };
+  }
+  const data = await get(apiConfig.endpoints.getPosts, config);
   return data.data;
 };
 

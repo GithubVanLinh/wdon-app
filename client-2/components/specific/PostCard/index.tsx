@@ -15,6 +15,9 @@ import { ReactNode } from "react";
 import MediaShow from "../MediaShow";
 import UserInfo from "../UserInfo";
 import TextTransformer from "@/components/common/TextTransformer";
+import { BASE_AVATAR_URL } from "@/utils/const";
+import { toLocalDateTime } from "@/utils/date";
+import Link from "next/link";
 
 export interface PostCardProps {
   top?: ReactNode;
@@ -23,6 +26,7 @@ export interface PostCardProps {
 }
 
 export default function PostCard({ post, onClick }: Readonly<PostCardProps>) {
+  const profileLink = `/${post.profile._id}`;
   return (
     <div>
       <div
@@ -30,7 +34,8 @@ export default function PostCard({ post, onClick }: Readonly<PostCardProps>) {
           console.log(e.target);
           if (
             e.target instanceof HTMLImageElement ||
-            e.target instanceof HTMLVideoElement
+            e.target instanceof HTMLVideoElement ||
+            e.target instanceof HTMLAnchorElement
           ) {
           } else if (onClick) {
             onClick();
@@ -41,10 +46,16 @@ export default function PostCard({ post, onClick }: Readonly<PostCardProps>) {
         <div></div>
         <div className="flex flex-row">
           <div className="flex justify-end items-start p-1 pl-3">
-            <Avatar src="https://pbs.twimg.com/media/GOg9e2taMAAgya-?format=jpg&name=medium" />
+            <Link href={profileLink}>
+              <Avatar src={post.profile.avatar || BASE_AVATAR_URL} />
+            </Link>
           </div>
           <div className="flex flex-col w-full">
-            {postInfo(post.profile.firstName, "link", "8h")}
+            {postInfo(
+              post.profile.firstName,
+              post.profile.link,
+              toLocalDateTime(post.createdAt)
+            )}
             {post.content && <TextTransformer text={post.content} />}
             {post.media && (
               <div>
@@ -67,8 +78,12 @@ export default function PostCard({ post, onClick }: Readonly<PostCardProps>) {
     return (
       <div className="flex flex-row justify-between">
         <div className="flex flex-row gap-2">
-          <div className="font-bold">{name}</div>
-          <div className="text-gray-400">@{link}</div>
+          <Link href={profileLink} className="font-bold">
+            {name}
+          </Link>
+          <Link href={profileLink} className="text-gray-400">
+            @{link}
+          </Link>
           <div className="text-gray-400">{time}</div>
         </div>
 

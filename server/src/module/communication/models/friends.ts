@@ -1,5 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument } from 'mongoose';
+import { Profile, ProfileDocument } from 'src/module/user/model/profile.schema';
 import { BaseSchema } from 'src/schema/base.schema';
 
 export enum FriendTypeEnum {
@@ -10,11 +11,19 @@ export enum FriendTypeEnum {
 
 @Schema()
 export class Friend extends BaseSchema {
-  @Prop({ required: true })
-  profile_id: mongoose.Schema.Types.ObjectId;
+  @Prop({
+    required: true,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Profile',
+  })
+  profile: ProfileDocument;
 
-  @Prop({ required: true })
-  friend_id: mongoose.Schema.Types.ObjectId;
+  @Prop({
+    required: true,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'Profile',
+  })
+  friend: ProfileDocument;
 
   @Prop({ type: String, enum: FriendTypeEnum, required: true })
   friendType: FriendTypeEnum;

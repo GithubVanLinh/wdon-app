@@ -1,5 +1,6 @@
 "use client";
 import CreatePostForm from "@/components/specific/CreatePostCard";
+import { useProfile } from "@/hooks/useProfile";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 
@@ -9,6 +10,8 @@ export default function Page({}: Readonly<PageProps>) {
   const createModel = useRef(null);
   const router = useRouter();
   const pathname = usePathname();
+
+  const [profile, error] = useProfile();
 
   useEffect(() => {}, [pathname]);
 
@@ -41,7 +44,7 @@ export default function Page({}: Readonly<PageProps>) {
       className="fixed bg-black/70 z-20 w-full h-full flex flex-col justify-start pt-4 items-center overflow-auto"
     >
       <div className="w-1/2 h-1/2">
-        <CreatePostForm />
+        <CreatePostForm avatar={profile?.avatar || ""} />
       </div>
     </div>
   );
