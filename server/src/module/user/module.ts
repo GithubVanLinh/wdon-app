@@ -1,15 +1,17 @@
 import { Module } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { User, UserSchema } from './model/user.schema';
-import { UserService } from './service';
+import { UserService } from './services/user';
 import { AuthModule } from '../auth/module';
-import { UserController } from './controller';
+import { UserController } from './controllers/users';
 import {
   Profile,
   ProfileDocument,
   ProfileSchema,
 } from './model/profile.schema';
 import { getFullMediaUrl } from 'src/utils/url';
+import { ProfileController } from './controllers/profile';
+import { ProfileService } from './services/profile';
 
 @Module({
   imports: [
@@ -36,8 +38,8 @@ import { getFullMediaUrl } from 'src/utils/url';
     ]),
     AuthModule,
   ],
-  controllers: [UserController],
-  providers: [UserService],
-  exports: [UserService],
+  controllers: [UserController, ProfileController],
+  providers: [UserService, ProfileService],
+  exports: [UserService, ProfileService],
 })
 export class UserModule {}

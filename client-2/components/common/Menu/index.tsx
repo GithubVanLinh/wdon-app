@@ -26,7 +26,7 @@ export default function Menu({ children, menu }: Readonly<MenuProps>) {
           (open ? "visible opacity-100" : "invisible opacity-0")
         }
       >
-        <div className="absolute bottom-4 left-0 w-80 border z-10 bg-white p-2 rounded-lg flex flex-col items-start">
+        <div className="absolute bottom-4 left-0 w-80 border z-20 bg-white p-2 rounded-lg flex flex-col items-start">
           {menu}
         </div>
         <div

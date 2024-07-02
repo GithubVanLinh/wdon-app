@@ -1,6 +1,6 @@
 import { Prop, Schema, SchemaFactory } from '@nestjs/mongoose';
 import mongoose, { HydratedDocument } from 'mongoose';
-import { Profile, ProfileDocument } from 'src/module/user/model/profile.schema';
+import { ProfileDocument } from 'src/module/user/model/profile.schema';
 import { BaseSchema } from 'src/schema/base.schema';
 
 export enum FriendTypeEnum {

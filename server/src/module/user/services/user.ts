@@ -1,11 +1,11 @@
 import { InjectModel } from '@nestjs/mongoose';
-import { User } from './model/user.schema';
-import { CreateUserDto } from './dto/create';
+import { User } from '../model/user.schema';
+import { CreateUserDto } from '../dto/create';
 import { Injectable } from '@nestjs/common';
-import { AuthService } from '../auth/service';
-import { AuthType } from '../auth/model/auth.schema';
-import { ClientSession, Model, ObjectId } from 'mongoose';
-import { Profile } from './model/profile.schema';
+import { AuthService } from '../../auth/service';
+import { AuthType } from '../../auth/model/auth.schema';
+import { Model } from 'mongoose';
+import { Profile } from '../model/profile.schema';
 
 @Injectable()
 export class UserService {
@@ -14,13 +14,6 @@ export class UserService {
     @InjectModel(Profile.name) private profileModel: Model<Profile>,
     private authService: AuthService,
   ) {}
-
-  async getProfileById(profile_id: string, opt?: { session?: ClientSession }) {
-    const profile = await this.profileModel.findById(profile_id, null, {
-      session: opt?.session,
-    });
-    return profile;
-  }
 
   async createUser(
     create: CreateUserDto &

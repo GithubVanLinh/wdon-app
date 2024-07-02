@@ -1,5 +1,6 @@
 "use client";
 
+import EndlessList from "@/components/common/EndlessList";
 import Loading from "@/components/common/Loading";
 import PostCard from "@/components/specific/PostCard";
 import useService from "@/hooks/useService";
@@ -25,14 +26,19 @@ export default function Page({ params: { profileId } }: Readonly<PageProps>) {
   }
 
   if (data) {
-    return data.map((d) => (
-      <PostCard
-        onClick={() => {
-          router.push(`/${d.profile._id}/status/${d._id}`);
-        }}
-        post={d}
-        key={d._id}
+    return (
+      <EndlessList
+        data={data}
+        item={(item) => (
+          <PostCard
+            onClick={() => {
+              router.push(`/${item.profile._id}/status/${item._id}`);
+            }}
+            post={item}
+            key={item._id}
+          />
+        )}
       />
-    ));
+    );
   }
 }

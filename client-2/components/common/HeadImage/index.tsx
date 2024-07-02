@@ -12,14 +12,30 @@ import UserLink from "@/components/specific/UserLink";
 import Link from "next/link";
 import { Profile } from "@/utils/type/post";
 import { toLocalDate } from "@/utils/date";
+import { follow as f, unfollow } from "../../../services/userService";
 
 export interface ProfileHeaderProps {
   profile: Profile;
+  follow: "follow" | "following" | "none";
+  onFollowClicked?: () => void;
 }
 
 export default function ProfileHeader({
-  profile: { avatar, background, createdAt, firstName, link, dayOfBirth },
+  profile: { _id, avatar, background, createdAt, firstName, link, dayOfBirth },
+  onFollowClicked,
+  follow = "none",
 }: Readonly<ProfileHeaderProps>) {
+  const handleFollowClick = async () => {
+    if (follow === "follow") {
+      const data = await f(_id);
+    } else if (follow === "following") {
+      const data = await unfollow(_id);
+    }
+
+    if (onFollowClicked) {
+      onFollowClicked();
+    }
+  };
   return (
     <div className="flex flex-col">
       <div className="relative w-full h-72 ">
@@ -38,19 +54,32 @@ export default function ProfileHeader({
         />
       </div>
       <div className="flex flex-row justify-end h-16">
-        <div className="flex flex-row justify-end h-fit m-2 gap-2">
-          <ImageButton
-            className="border"
-            image={<EllipsisHorizontalIcon width={20} height={20} />}
-          />
-          <ImageButton
-            className="border"
-            image={<EnvelopeIcon width={20} height={20} />}
-          />
-          <button className="px-8 py-2  bg-blue-400 rounded-full text-white font-bold">
-            Follow
-          </button>
-        </div>
+        {follow != "none" ? (
+          <div className="flex flex-row justify-end h-fit m-2 gap-2">
+            <ImageButton
+              className="border"
+              image={<EllipsisHorizontalIcon width={20} height={20} />}
+            />
+            <ImageButton
+              className="border"
+              image={<EnvelopeIcon width={20} height={20} />}
+            />
+
+            <button
+              className="px-8 py-2  bg-blue-400 rounded-full text-white font-bold capitalize"
+              onClick={handleFollowClick}
+            >
+              {follow}
+            </button>
+          </div>
+        ) : (
+          <Link
+            href="#"
+            className="m-2 border py-2 px-4 rounded-full justify-center items-center flex"
+          >
+            Edit profile
+          </Link>
+        )}
       </div>
       <div className="pl-6 mt-4 flex flex-col">
         <h1 className="font-bold text-xl">{firstName}</h1>

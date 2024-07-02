@@ -5,7 +5,6 @@ import {
   SubscribeMessage,
   WebSocketGateway,
   WebSocketServer,
-  WsResponse,
 } from '@nestjs/websockets';
 import { Server, Socket } from 'socket.io';
 
@@ -14,23 +13,7 @@ import { Server, Socket } from 'socket.io';
     origin: '*',
   },
 })
-export class PostGateway implements OnGatewayConnection, OnGatewayDisconnect {
-  handleDisconnect(client: Socket) {
-    console.log('client disconnected: ', client.id);
-  }
-  handleConnection(client: Socket, ...args: any[]) {
-    console.log('client connected: ', client.id);
-    console.log('args: ', client.handshake.headers.authorization);
-
-    client.emit(
-      'message',
-      JSON.stringify({
-        authorization: client.handshake.headers.authorization,
-      }),
-      'ok',
-    );
-  }
-
+export class PostGateway {
   @WebSocketServer()
   server: Server;
 

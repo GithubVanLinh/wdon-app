@@ -7,6 +7,9 @@ import { JwtAuthGuard } from './auth/guard/jwt';
 import { UserModule } from './user/module';
 import { PostModule } from './post/module';
 import { SocketModule } from './socket/module';
+import { StatsModule } from './stats/module';
+import { MediaModule } from './media/module';
+import { MessageModule } from './message/module';
 
 @Module({
   imports: [
@@ -16,6 +19,9 @@ import { SocketModule } from './socket/module';
     UserModule,
     PostModule,
     SocketModule,
+    StatsModule,
+    MediaModule,
+    MessageModule,
   ],
   controllers: [],
   providers: [

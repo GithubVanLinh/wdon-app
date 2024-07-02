@@ -46,7 +46,6 @@ export class PostService {
 
   //TODO
   async getPosts({ profileId }: GetPostsDto = {}) {
-    console.log(profileId);
     const condition: FilterQuery<Post> = {};
     if (profileId) {
       condition.profile = profileId;

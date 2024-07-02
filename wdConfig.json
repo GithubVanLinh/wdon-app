@@ -1,0 +1,14 @@
+{
+  "auth": { "authDecorator": "ProfileId" },
+  "module": [
+    {
+      "name": "Message",
+      "schema": {
+        "from": "string",
+        "to": "string",
+        "message": "string",
+        "media": "string"
+      }
+    }
+  ]
+}

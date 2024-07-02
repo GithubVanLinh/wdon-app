@@ -1,4 +1,4 @@
-import { HttpAdapterHost, NestFactory } from '@nestjs/core';
+import { HttpAdapterHost, NestFactory, Reflector } from '@nestjs/core';
 import { AppModule } from './module/app.module';
 import { AllExceptionsFilter } from './module/error-handling';
 import { ValidationPipe } from '@nestjs/common';
@@ -7,6 +7,7 @@ import { NestExpressApplication } from '@nestjs/platform-express';
 import * as path from 'path';
 import { RedisIoAdapter } from './RedisAdapter';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
+import { MediaLinkInterceptor } from './intercepters/medialink';
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule);
@@ -33,7 +34,10 @@ async function bootstrap() {
       forbidNonWhitelisted: true,
     }),
   );
-  app.useGlobalInterceptors(new TransformInterceptor());
+  app.useGlobalInterceptors(
+    new TransformInterceptor(),
+    new MediaLinkInterceptor(app.get(Reflector)),
+  );
 
   const redisIoAdapter = new RedisIoAdapter(app);
   await redisIoAdapter.connectToRedis();

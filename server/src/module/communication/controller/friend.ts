@@ -7,10 +7,10 @@ import {
   Query,
   UnauthorizedException,
 } from '@nestjs/common';
-import { ProfileId } from '../auth/decorators/user';
-import { FriendService } from './service';
-import { FriendTypeEnum } from './models/friends';
-import { ApiBearerAuth, ApiTags } from '@nestjs/swagger';
+import { ProfileId } from '../../auth/decorators/user';
+import { FriendService } from '../service/friend';
+import { FriendTypeEnum } from '../models/friends';
+import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 
 @Controller('friends')
 @ApiTags('Friends')
@@ -24,6 +24,29 @@ export class FriendController {
   ) {
     const request = await this.friendService.sendRequest(profileId, targetId);
     return request;
+  }
+
+  @ApiBearerAuth()
+  @ApiBody({ schema: { properties: { friend_id: { type: 'string' } } } })
+  @Post('/follow')
+  async follow(
+    @ProfileId() profileId: string,
+    @Body('friend_id')
+    targetId: string,
+  ) {
+    const req = await this.friendService.follow(profileId, targetId);
+    return req;
+  }
+
+  @ApiBearerAuth()
+  @ApiBody({ schema: { properties: { friend_id: { type: 'string' } } } })
+  @Post('/unfollow')
+  async unfollow(
+    @ProfileId() profileId: string,
+    @Body('friend_id') tar: string,
+  ) {
+    const res = await this.friendService.unfollow(profileId, tar);
+    return res;
   }
 
   @ApiBearerAuth()

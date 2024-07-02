@@ -20,5 +20,5 @@ export default function LoadingAndError({
     return <div className="text-red-600">{error.message}</div>;
   }
 
-  return <div>{children}</div>;
+  return children;
 }

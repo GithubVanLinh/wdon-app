@@ -1,0 +1,20 @@
+import apiConfig from "@/config/apiConfig";
+import { get } from "@/utils/api";
+import { ApiResponse } from "@/utils/type/api";
+import { Conversation, Message } from "@/utils/type/conversation";
+
+const getListConversation = async () => {
+  const data: ApiResponse<Conversation[]> = await get(
+    apiConfig.endpoints.getListConversation
+  );
+  return data.data;
+};
+
+const getListMessageFromConversation = async (id: string) => {
+  const data: ApiResponse<Message[]> = await get(
+    apiConfig.endpoints.getListMessageInConversation(id)
+  );
+  return data.data;
+};
+
+export { getListConversation, getListMessageFromConversation };

@@ -15,7 +15,7 @@ import { ProfileId } from 'src/module/auth/decorators/user';
 import { PostService } from '../services/post';
 import { MediaEnum } from '../model/post.schema';
 import { extractTagFromString } from 'src/utils/string';
-import { FriendService } from 'src/module/communication/service';
+import { FriendService } from 'src/module/communication/service/friend';
 import { getFullMediaUrl } from 'src/utils/url';
 import { deleteFileFromLocal, saveFileToLocal } from 'src/utils';
 import { PostGateway } from '../gateway';
@@ -112,7 +112,6 @@ export class PostController {
     // return post;
   }
 
-  //TODO
   @Get('/')
   async getPosts(@Query() { profileId }: GetPostsDto) {
     const posts = await this.postService.getPosts({ profileId: profileId });

@@ -5,10 +5,12 @@ import Loading from "@/components/common/Loading";
 import StickyArea from "@/components/common/StickyArea";
 import Tab from "@/components/common/Tab";
 import BackHeader from "@/components/specific/BackHeader";
+import { useProfile } from "@/hooks/useProfile";
 import useService from "@/hooks/useService";
+import { useAppSelector } from "@/lib/hooks";
 import { getProfileByProfileId } from "@/services/userService";
 import { usePathname } from "next/navigation";
-import { ReactNode } from "react";
+import { ReactNode, useEffect, useState } from "react";
 
 export interface PageProps {
   children: ReactNode;
@@ -21,7 +23,17 @@ export default function Page({
   params: { profileId },
   children,
 }: Readonly<PageProps>) {
+  const profile = useAppSelector((state) => state.auth.profile);
+  const isYours = profileId == profile?._id;
   const { data, error, loading } = useService(getProfileByProfileId, profileId);
+
+  const [follow, setFollow] = useState<boolean>(false);
+  useEffect(() => {
+    if (data) {
+      setFollow(data?.relationship.isFollow ? true : false);
+    }
+  }, [data]);
+
   const pathname = usePathname();
   let curTab = "post";
   if (pathname.includes("comment")) {
@@ -42,11 +54,18 @@ export default function Page({
   }
 
   if (data) {
+    const { profile: pData, relationship } = data;
     return (
       <div className="flex flex-row w-full">
-        <div className="flex flex-col grow shrink basis-0 relative border-x">
-          <BackHeader headTitle={data?.firstName} />
-          <ProfileHeader profile={data} />
+        <div className="flex flex-col grow shrink basis-0 border-x">
+          <BackHeader headTitle={pData?.firstName} />
+          <ProfileHeader
+            onFollowClicked={() => {
+              setFollow(!follow);
+            }}
+            profile={pData}
+            follow={isYours ? "none" : follow ? "following" : "follow"}
+          />
           <div className="flex flex-col">
             <div className="flex flex-row">
               <Tab

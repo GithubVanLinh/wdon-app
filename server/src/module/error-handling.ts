@@ -32,10 +32,9 @@ export class AllExceptionsFilter implements ExceptionFilter {
 
 function getHttpStatus(excception: unknown): [HttpStatus, string] {
   if (excception instanceof HttpException) {
-    return [
-      excception.getStatus(),
-      excception.message + JSON.stringify(excception.getResponse()),
-    ];
+    const message =
+      (excception.getResponse() as any).message ?? excception.message;
+    return [excception.getStatus(), message];
   }
 
   return [HttpStatus.INTERNAL_SERVER_ERROR, 'Internal Server Error'];

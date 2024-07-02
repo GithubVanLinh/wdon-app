@@ -91,7 +91,7 @@ export class AuthService {
       username: user.username,
       profile_id: user.profile._id,
       user_id: user.users._id,
-      name: user.profile.name,
+      name: user.profile.firstName,
     };
 
     return {

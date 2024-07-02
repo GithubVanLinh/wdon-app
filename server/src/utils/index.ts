@@ -18,6 +18,12 @@ export function getExtFromMIME(mime: AllowMimeType) {
   return data[mime];
 }
 
+/**
+ * save file to local host
+ * @param folderPath path to folder
+ * @param file File to save
+ * @returns name of file
+ */
 export function saveFileToLocal(
   folderPath: string,
   file: { mimetype: string; buffer: Buffer },
@@ -27,7 +33,6 @@ export function saveFileToLocal(
     Date.now().toString() +
     getExtFromMIME(file.mimetype as AllowMimeType);
   const folderName = path.join(process.cwd(), folderPath);
-  console.log(folderName);
   if (!fs.existsSync(folderName)) {
     fs.mkdirSync(folderName);
   }
@@ -39,6 +44,16 @@ export function saveFileToLocal(
 export function deleteFileFromLocal(spath: string) {
   const realPath = path.join(process.cwd(), spath);
   fs.unlinkSync(realPath);
+}
+
+export function deleteFilesFromLocal(
+  folderPath: string,
+  listName: Array<string>,
+) {
+  for (const name of listName) {
+    const realPath = path.join(process.cwd(), folderPath, name);
+    fs.unlinkSync(realPath);
+  }
 }
 
 // export function saveFilesToLocal(

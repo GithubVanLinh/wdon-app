@@ -30,3 +30,9 @@ export interface Profile {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface RelationshipResponse {
+  isFriends?: boolean;
+  isFollow?: boolean;
+  isNothing?: boolean;
+}

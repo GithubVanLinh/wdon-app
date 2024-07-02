@@ -1,18 +1,72 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import { Friend, FriendTypeEnum } from './models/friends';
-import { Model } from 'mongoose';
-import { UserService } from '../user/service';
+import { Friend, FriendTypeEnum } from '../models/friends';
+import { Model, SessionOption } from 'mongoose';
+import { UserService } from '../../user/services/user';
+import { ProfileService } from '../../user/services/profile';
+import { RelationshipResponse } from '../dto/find-relationship';
 
 @Injectable()
 export class FriendService {
   constructor(
     @InjectModel(Friend.name) private friendModel: Model<Friend>,
     private userService: UserService,
+    private profileService: ProfileService,
   ) {}
 
   async getRequest(id: string) {
     return await this.friendModel.findById(id);
+  }
+
+  async findRelationship(
+    srcId: string,
+    tarId: string,
+    opt?: SessionOption,
+  ): Promise<RelationshipResponse> {
+    const relation = await this.friendModel.findOne(
+      {
+        profile: srcId,
+        friend: tarId,
+      },
+      null,
+      opt,
+    );
+
+    if (!relation) {
+      return { isNothing: true };
+    }
+
+    if (relation.friendType === FriendTypeEnum.FRIEND) {
+      return { isFriends: true };
+    }
+
+    if (relation.friendType === FriendTypeEnum.FOLLOWING) {
+      return { isFollow: true };
+    }
+
+    return {};
+  }
+
+  async follow(src: string, tar: string) {
+    const srcPro = await this.profileService.getProfileById(src);
+    const tarPro = await this.profileService.getProfileById(tar);
+    const newFollow = new this.friendModel({
+      profile: srcPro,
+      friend: tarPro,
+      friendType: FriendTypeEnum.FOLLOWING,
+    });
+
+    const doc = await newFollow.save();
+    return doc;
+  }
+
+  async unfollow(src: string, tar: string) {
+    const relation = await this.friendModel.deleteOne({
+      profile: src,
+      friend: tar,
+    });
+
+    return relation;
   }
 
   async sendRequest(profileId: string, targetProfileId: string) {
@@ -31,10 +85,10 @@ export class FriendService {
       friendType: FriendTypeEnum.PENDING,
     });
 
-    const yourProfile = await this.userService.getProfileById(profileId);
+    const yourProfile = await this.profileService.getProfileById(profileId);
     try {
       const targetProfile =
-        await this.userService.getProfileById(targetProfileId);
+        await this.profileService.getProfileById(targetProfileId);
 
       const newFriendRequest = await new this.friendModel({
         profile: yourProfile,
@@ -56,13 +110,13 @@ export class FriendService {
       const friend = await this.friendModel.findById(friendId);
       friend.friendType = friendType;
       await friend.save({ session });
-      const friendProfile = await this.userService.getProfileById(
+      const friendProfile = await this.profileService.getProfileById(
         friend.friend.id,
         {
           session,
         },
       );
-      const yourProfile = await this.userService.getProfileById(
+      const yourProfile = await this.profileService.getProfileById(
         friend.profile.id,
         { session: session },
       );
