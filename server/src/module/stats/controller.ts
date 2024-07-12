@@ -20,7 +20,6 @@ export class StatsController {
       profileId,
       id,
     );
-
     return { profile: profile, relationship: relationship };
   }
 }

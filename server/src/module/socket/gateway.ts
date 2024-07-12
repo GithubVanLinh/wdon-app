@@ -34,7 +34,8 @@ export class Gateway
   }
   async handleConnection(client: Socket, ...args: any[]) {
     console.log('client connected: ', client.id);
-    const token = client.handshake.headers.authorization;
+    const bearerToken = client.handshake.headers.authorization;
+    const token = bearerToken.split(' ')[1];
     try {
       const parseData = await this.jwtService.verifyAsync<PayloadJWT>(token);
       if (!parseData) {

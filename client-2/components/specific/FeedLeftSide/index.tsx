@@ -44,83 +44,84 @@ export default function FeedLeftSide({
 }: Readonly<FeedLeftSideProps & DivProps>) {
   const [profile, errorLoad] = useProfile();
 
-  console.log(profile);
-  return (
-    <div {...res}>
-      <div className="flex flex-col justify-between p-2 min-w-0">
-        <div className="flex flex-col">
-          <div className="p-2 flex">
-            <Logo />
+  if (profile) {
+    return (
+      <div {...res}>
+        <div className="flex flex-col justify-between p-2 min-w-0">
+          <div className="flex flex-col items-center xl:items-start">
+            <div className="p-2 flex">
+              <Logo />
+            </div>
+            <SideTab
+              selected={currentTab === "home"}
+              path="/feed"
+              name="Home"
+              icon={<HomeIcon width={30} height={30} />}
+              selectedIcon={<HomeIconSolid width={30} height={30} />}
+            />
+            <SideTab
+              selected={currentTab === "search"}
+              path="/search"
+              name="Search"
+              icon={<MagnifyingGlassIcon width={30} height={30} />}
+              selectedIcon={
+                <MagnifyingGlassIcon strokeWidth={2} width={30} height={30} />
+              }
+            />
+            <SideTab
+              selected={currentTab === "notifications"}
+              path="/notifications"
+              name="Notifications"
+              icon={<BellIcon width={30} height={30} />}
+            />
+            <SideTab
+              selected={currentTab === "message"}
+              path="/message"
+              name="Message"
+              selectedIcon={
+                <EnvelopeIconSolid strokeWidth={2} width={30} height={30} />
+              }
+              icon={<EnvelopeIcon width={30} height={30} />}
+            />
+            <SideTab
+              selected={currentTab === "cube"}
+              path="/cube"
+              name="Cube"
+              icon={<CubeIcon width={30} height={30} />}
+            />
+            <SideTab
+              selected={currentTab === "communications"}
+              path="/communications"
+              name="Communications"
+              icon={<UserGroupIcon width={30} height={30} />}
+            />
+            <ImageButton
+              text="Premium"
+              image={<XMarkIcon width={30} height={30} />}
+            />
+            <SideTab
+              selected={currentTab === "profile"}
+              path="/profile"
+              name="Profile"
+              icon={<UserIcon width={30} height={30} />}
+            />
+            <ImageButton
+              text="More"
+              image={<EllipsisHorizontalIcon width={30} height={30} />}
+            />
+            <Link
+              href="/post"
+              scroll={false}
+              className="hidden lg:flex bg-blue-400 text-lg font-bold text-white p-2 rounded-full text-center justify-center items-center"
+            >
+              Post
+            </Link>
           </div>
-          <SideTab
-            selected={currentTab === "home"}
-            path="/feed"
-            name="Home"
-            icon={<HomeIcon width={30} height={30} />}
-            selectedIcon={<HomeIconSolid width={30} height={30} />}
-          />
-          <SideTab
-            selected={currentTab === "search"}
-            path="/search"
-            name="Search"
-            icon={<MagnifyingGlassIcon width={30} height={30} />}
-            selectedIcon={
-              <MagnifyingGlassIcon strokeWidth={2} width={30} height={30} />
-            }
-          />
-          <SideTab
-            selected={currentTab === "notifications"}
-            path="/notifications"
-            name="Notifications"
-            icon={<BellIcon width={30} height={30} />}
-          />
-          <SideTab
-            selected={currentTab === "message"}
-            path="/message"
-            name="Message"
-            selectedIcon={
-              <EnvelopeIconSolid strokeWidth={2} width={30} height={30} />
-            }
-            icon={<EnvelopeIcon width={30} height={30} />}
-          />
-          <SideTab
-            selected={currentTab === "cube"}
-            path="/cube"
-            name="Cube"
-            icon={<CubeIcon width={30} height={30} />}
-          />
-          <SideTab
-            selected={currentTab === "communications"}
-            path="/communications"
-            name="Communications"
-            icon={<UserGroupIcon width={30} height={30} />}
-          />
-          <ImageButton
-            text="Premium"
-            image={<XMarkIcon width={30} height={30} />}
-          />
-          <SideTab
-            selected={currentTab === "profile"}
-            path="/profile"
-            name="Profile"
-            icon={<UserIcon width={30} height={30} />}
-          />
-          <ImageButton
-            text="More"
-            image={<EllipsisHorizontalIcon width={30} height={30} />}
-          />
-          <Link
-            href="/post"
-            scroll={false}
-            className="hidden lg:flex bg-blue-400 text-lg font-bold text-white p-2 rounded-full text-center justify-center items-center"
-          >
-            Post
-          </Link>
-        </div>
-        <div className="flex flex-row">
-          {profile && <UserInfo user={profile} />}
+          <div className="flex flex-row">
+            {profile && <UserInfo user={profile} />}
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
 }

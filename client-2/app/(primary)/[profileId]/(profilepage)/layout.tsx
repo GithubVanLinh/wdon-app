@@ -2,9 +2,11 @@
 
 import ProfileHeader from "@/components/common/HeadImage";
 import Loading from "@/components/common/Loading";
+import LoadingAndError from "@/components/common/LoadingAndError";
 import StickyArea from "@/components/common/StickyArea";
 import Tab from "@/components/common/Tab";
 import BackHeader from "@/components/specific/BackHeader";
+import ProfileHead from "@/components/specific/ProfileHead";
 import { useProfile } from "@/hooks/useProfile";
 import useService from "@/hooks/useService";
 import { useAppSelector } from "@/lib/hooks";
@@ -30,6 +32,7 @@ export default function Page({
   const [follow, setFollow] = useState<boolean>(false);
   useEffect(() => {
     if (data) {
+      console.log("data", data);
       setFollow(data?.relationship.isFollow ? true : false);
     }
   }, [data]);
@@ -45,27 +48,12 @@ export default function Page({
   if (pathname.includes("media")) {
     curTab = "media";
   }
-  if (error) {
-    return <div className="text-red-600">{error.message}</div>;
-  }
 
-  if (loading) {
-    return <Loading />;
-  }
-
-  if (data) {
-    const { profile: pData, relationship } = data;
-    return (
+  return (
+    <LoadingAndError error={error} loading={loading}>
       <div className="flex flex-row w-full">
         <div className="flex flex-col grow shrink basis-0 border-x">
-          <BackHeader headTitle={pData?.firstName} />
-          <ProfileHeader
-            onFollowClicked={() => {
-              setFollow(!follow);
-            }}
-            profile={pData}
-            follow={isYours ? "none" : follow ? "following" : "follow"}
-          />
+          <ProfileHead data={data} isYours={isYours} />
           <div className="flex flex-col">
             <div className="flex flex-row">
               <Tab
@@ -96,6 +84,6 @@ export default function Page({
           <StickyArea>Right</StickyArea>
         </div>
       </div>
-    );
-  }
+    </LoadingAndError>
+  );
 }

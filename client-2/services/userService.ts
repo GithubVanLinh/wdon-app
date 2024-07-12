@@ -1,5 +1,6 @@
 import apiConfig from "@/config/apiConfig";
 import { get, post } from "@/utils/api";
+import { wait } from "@/utils/time";
 import { Profile, RelationshipResponse } from "@/utils/type/post";
 
 const getProfile = async (token: string): Promise<Profile> => {
@@ -15,7 +16,7 @@ const getProfileByProfileId = async (
   profileId: string
 ): Promise<{ profile: Profile; relationship: RelationshipResponse }> => {
   const data = await get(apiConfig.endpoints.getProfileById(profileId));
-  console.log("data", data);
+  await wait(3000);
   return data.data;
 };
 

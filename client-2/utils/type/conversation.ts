@@ -19,5 +19,6 @@ export interface Message {
   message: string;
   updatedAt: Date;
   createdAt: Date;
+  show: boolean;
   __v: number;
 }

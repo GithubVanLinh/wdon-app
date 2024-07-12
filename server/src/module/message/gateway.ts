@@ -1,7 +1,11 @@
 import { WebSocketGateway, WebSocketServer } from '@nestjs/websockets';
-import { Server, Socket } from 'socket.io';
-import { CreateMessageDto } from './dto/create';
+import { Server } from 'socket.io';
 import { Logger } from '@nestjs/common';
+import { MessageDocument } from './model';
+
+interface ServerToClient {
+  'new-message': (message: MessageDocument) => void;
+}
 
 @WebSocketGateway({
   cors: {
@@ -12,10 +16,9 @@ export class MessageGateway {
   logger = new Logger(MessageGateway.name);
 
   @WebSocketServer()
-  server: Server;
+  server: Server<ServerToClient>;
 
-  async sendMessage(message: CreateMessageDto, listClient: string[]) {
-    this.logger.log('list client', listClient);
-    this.server.to(listClient).emit('message', message);
+  async sendMessage(message: MessageDocument, listClient: string[]) {
+    this.server.to(listClient).emit('new-message', message);
   }
 }

@@ -23,6 +23,11 @@ export class ProfileController {
     @ProfileId() yourProfileId: string,
     @Param('id') profileId: string,
   ) {
+    console.log(
+      'server/src/module/user/controllers/profile.ts',
+      'Profileid',
+      profileId,
+    );
     const profile = await this.profileService.getProfileById(profileId);
     return profile;
   }

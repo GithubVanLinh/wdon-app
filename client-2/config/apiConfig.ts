@@ -6,6 +6,7 @@ const apiConfig = {
     getProfile: "/profile",
     getListConversation: "/conversations",
     getListMessageInConversation: (id: string) => `/message/${id}`,
+    sendMessage: "/message",
     getProfileById: (id: string) => `/stats/profile/${id}`,
     follow: "/friends/follow",
     unfollow: "/friends/unfollow",

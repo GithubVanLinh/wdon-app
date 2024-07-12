@@ -12,10 +12,11 @@ export default function MediaShow({ media }: Readonly<MediaShowProps>) {
       <div
         className={
           "rounded-lg overflow-hidden max-h-96 grid grid-flow-col gap-px" +
-          (media.length === 2 ? " grid-rows-1" : " grid-rows-2")
+          (media.length === 2 ? " grid-rows-1" : " grid-rows-2") +
+          (media.length > 4 ? " [&>*:nth-child(4)]:brightness-50" : "")
         }
       >
-        {media.map((m, i) => {
+        {media.slice(0, 4).map((m, i) => {
           return (
             <Link
               scroll={false}

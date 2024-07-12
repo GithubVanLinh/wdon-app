@@ -18,7 +18,7 @@ export interface AuthProviderProps {
 
 export const authInstance: { axios?: AxiosInstance } = {};
 
-const whiteList = ["/auth/login", "/auth/register", "/"];
+export const whiteList = ["/auth/login", "/auth/register", "/"];
 
 export default function AuthProvider({
   children,
@@ -32,13 +32,11 @@ export default function AuthProvider({
   const rootRouter = pathname.split("/")[1];
   useEffect(() => {
     if (rootRouter) {
-      console.log("current", rootRouter);
       dispatch(setTab(rootRouter));
     }
   }, [dispatch, rootRouter]);
   useEffect(() => {
     if (!stateToken) {
-      console.log("in auth: setToken");
       const token = localStorage.getItem("token");
       const strProfile = localStorage.getItem("profile");
       if (token && strProfile) {
@@ -62,13 +60,13 @@ export default function AuthProvider({
     );
   }
   return (
-    <div>
+    <>
       {notify && (
         <div className="fixed border bg-blue-300 flex justify-center items-center rounded-full bottom-2 right-2 z-50 w-1/6 h-20">
           notify
         </div>
       )}
       {children}
-    </div>
+    </>
   );
 }

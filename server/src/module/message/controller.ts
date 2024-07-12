@@ -35,7 +35,7 @@ export class MessageController {
     );
     const data = await this.messageSerivce.create(message);
     await this.gateway.sendMessage(
-      message,
+      data,
       conversation.participants.map((p) => p.profile.toString()),
     );
     return data;

@@ -9,20 +9,19 @@ import { setCurrent } from "@/lib/feature/message/messageSlice";
 import { useAppDispatch, useAppSelector } from "@/lib/hooks";
 import { getListConversation } from "@/services/conversation";
 import { Cog8ToothIcon, PlusIcon } from "@heroicons/react/24/outline";
-import { usePathname, useRouter } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { ReactNode, useEffect, useState } from "react";
 
 export interface PageProps {
   children: ReactNode;
 }
 
-export default function Page({ children }: Readonly<PageProps>) {
+export default function MessagePage({ children }: Readonly<PageProps>) {
   const current = useAppSelector((state) => state.message.current);
 
   const { data, loading, error } = useService(getListConversation, null);
   const router = useRouter();
   const dispatch = useAppDispatch();
-  useEffect(() => {});
 
   if (loading) {
     return <Loading />;
@@ -33,7 +32,6 @@ export default function Page({ children }: Readonly<PageProps>) {
   }
 
   if (data) {
-    console.log(data);
     return (
       <div className="w-full h-full overflow-hidden flex flex-row">
         <div className="flex grow shrink basis-0 flex-col h-screen border-l divide-y overflow-y-scroll">

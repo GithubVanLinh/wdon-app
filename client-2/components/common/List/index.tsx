@@ -3,7 +3,7 @@ import { ReactNode } from "react";
 
 export interface ListProps<T> {
   list: T[];
-  item: (it: T) => ReactNode;
+  item: (it: T, next?: T) => ReactNode;
 }
 
 export default function List<T>({
@@ -11,5 +11,7 @@ export default function List<T>({
   item,
   ...res
 }: Readonly<ListProps<T> & DivProps>) {
-  return <div {...res}>{list.map((it) => item(it))}</div>;
+  return (
+    <div {...res}>{list.map((it, index, arr) => item(it, arr[index + 1]))}</div>
+  );
 }

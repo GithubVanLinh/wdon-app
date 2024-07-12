@@ -11,16 +11,14 @@ export interface LayoutProps {
 export default function Layout({ children }: Readonly<LayoutProps>) {
   const currentTabState = useAppSelector((state) => state.feed.currentTab);
   return (
-    <div className="">
-      <div className="flex flex-row justify-between">
-        <div className="hidden sm:flex sm:flex-row bg-white sticky top-0 basis-0 grow shrink h-screen justify-end">
-          <FeedLeftSide
-            currentTab={currentTabState}
-            className="flex w-10/12 h-full"
-          />
-        </div>
-        <div className="flex grow-3 shrink basis-0 gap-6">{children}</div>
+    <div className="flex flex-row justify-between">
+      <div className="hidden sm:flex sm:flex-row min-w-0 bg-white sticky top-0 basis-0 grow shrink h-screen justify-end">
+        <FeedLeftSide
+          currentTab={currentTabState}
+          className="flex w-full xl:w-10/12 h-full"
+        />
       </div>
+      <div className="flex grow-3 shrink basis-0 gap-6">{children}</div>
     </div>
   );
 }

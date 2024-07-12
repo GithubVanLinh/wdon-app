@@ -15,7 +15,6 @@ const useService = <T, P>(
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    console.log("use service");
     const fetchData = async () => {
       try {
         const response = await service(resp);
@@ -29,7 +28,7 @@ const useService = <T, P>(
 
     fetchData();
   }, [service, resp]);
-  const trans: T = data ? data : ({} as T);
+  const trans: T = data ? data : (null as T);
   return { data: trans, loading, error };
 };
 
