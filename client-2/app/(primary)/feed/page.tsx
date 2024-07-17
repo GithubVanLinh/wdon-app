@@ -18,6 +18,7 @@ export interface PageProps {}
 export default function Page({}: Readonly<PageProps>) {
   const posts = useAppSelector((state) => state.post.posts);
   const profile = useAppSelector((state) => state.auth.profile);
+  console.log("profile", profile);
   const [error, setError] = useState<AxiosError>();
   const dispatch = useAppDispatch();
   const router = useRouter();

@@ -10,7 +10,6 @@ export interface MenuProps {
 export default function Menu({ children, menu }: Readonly<MenuProps>) {
   const [open, setOpen] = useState(false);
   const onOutsideClick = () => {
-    console.log("outside");
     setOpen(false);
   };
 
@@ -26,12 +25,12 @@ export default function Menu({ children, menu }: Readonly<MenuProps>) {
           (open ? "visible opacity-100" : "invisible opacity-0")
         }
       >
-        <div className="absolute bottom-4 left-0 w-80 border z-20 bg-white p-2 rounded-lg flex flex-col items-start">
+        <div className="absolute bottom-4 left-0 w-80 border z-30 bg-white p-2 rounded-lg flex flex-col items-start">
           {menu}
         </div>
         <div
           onClick={onOutsideClick}
-          className="fixed w-screen h-screen top-0 left-0"
+          className="fixed w-screen h-screen top-0 left-0 z-20"
         ></div>
       </div>
     </>

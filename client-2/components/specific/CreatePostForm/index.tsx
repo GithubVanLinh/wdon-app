@@ -1,5 +1,6 @@
 import Avatar from "@/components/common/Avatar";
 import Button from "@/components/common/Button";
+import { useNotify } from "@/hooks/useNotify";
 import { BASE_AVATAR_URL } from "@/utils/const";
 import {
   CalendarIcon,
@@ -18,6 +19,8 @@ export interface CreatePostFormProps {
 export default function CreatePostForm({
   avatar,
 }: Readonly<CreatePostFormProps>) {
+  const [showNotify] = useNotify();
+
   return (
     <div className="">
       <div className="flex flex-row gap-2 pt-4 pl-4">
@@ -52,7 +55,14 @@ export default function CreatePostForm({
           <MapPinIcon width={20} height={20} />
         </div>
         <div>
-          <Button className="bg-blue-400 text-white px-4 py-2">Post</Button>
+          <Button
+            className="bg-blue-400 text-white px-4 py-2"
+            onClick={() => {
+              showNotify("Test");
+            }}
+          >
+            Post
+          </Button>
         </div>
       </div>
     );

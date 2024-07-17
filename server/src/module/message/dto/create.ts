@@ -17,7 +17,7 @@ export class CreateMessageDto {
   @IsMongoId()
   conversation_id: string;
 
-  @ApiProperty()
+  @ApiPropertyOptional()
   @IsOptional()
   @IsString()
   from: string;

@@ -1,3 +1,5 @@
+"use client";
+
 import Avatar from "@/components/common/Avatar";
 import IconAndText from "@/components/common/IconAndText";
 import { Post } from "@/utils/type/post";
@@ -11,7 +13,7 @@ import {
   EnvelopeIcon,
   HeartIcon,
 } from "@heroicons/react/24/outline";
-import { ReactNode } from "react";
+import { ReactNode, useRef, useState } from "react";
 import MediaShow from "../MediaShow";
 import UserInfo from "../UserInfo";
 import TextTransformer from "@/components/common/TextTransformer";
@@ -27,28 +29,41 @@ export interface PostCardProps {
 
 export default function PostCard({ post, onClick }: Readonly<PostCardProps>) {
   const profileLink = `/${post.profile._id}`;
+  const ref = useRef(null);
+
   return (
-    <div>
+    <div className="relative">
       <div
         onClick={(e) => {
-          console.log(e.target);
           if (
             e.target instanceof HTMLImageElement ||
             e.target instanceof HTMLVideoElement ||
             e.target instanceof HTMLAnchorElement
           ) {
-          } else if (onClick) {
-            onClick();
+          } else {
+            if (
+              e.target instanceof HTMLDivElement &&
+              e.target.className.includes("profile-info")
+            ) {
+            } else if (onClick) {
+              onClick();
+            }
           }
         }}
         className="flex flex-col hover:bg-gray-200 p-2"
       >
-        <div></div>
         <div className="flex flex-row">
-          <div className="flex justify-end items-start p-1 pl-3">
-            <Link href={profileLink}>
+          <div className="flex justify-end items-start p-1 pl-3 relative h-fit group">
+            <Link ref={ref} href={profileLink} className="h-fit w-fit">
               <Avatar src={post.profile.avatar || BASE_AVATAR_URL} />
             </Link>
+            <div
+              className="profile-info flex-col transition-all duration-500 
+              absolute bottom-20 -left-4 bg-blue-50 border z-50 w-40 hover:visible opacity-0 hover:opacity-100 invisible 
+              group-hover:visible group-hover:opacity-100 delay-300"
+            >
+              <div className="profile-info">Profile Info</div>
+            </div>
           </div>
           <div className="flex flex-col w-full">
             {postInfo(

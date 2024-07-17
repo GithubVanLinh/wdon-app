@@ -1,13 +1,9 @@
 "use client";
 
-import ProfileHeader from "@/components/common/HeadImage";
-import Loading from "@/components/common/Loading";
 import LoadingAndError from "@/components/common/LoadingAndError";
 import StickyArea from "@/components/common/StickyArea";
 import Tab from "@/components/common/Tab";
-import BackHeader from "@/components/specific/BackHeader";
 import ProfileHead from "@/components/specific/ProfileHead";
-import { useProfile } from "@/hooks/useProfile";
 import useService from "@/hooks/useService";
 import { useAppSelector } from "@/lib/hooks";
 import { getProfileByProfileId } from "@/services/userService";
@@ -32,7 +28,6 @@ export default function Page({
   const [follow, setFollow] = useState<boolean>(false);
   useEffect(() => {
     if (data) {
-      console.log("data", data);
       setFollow(data?.relationship.isFollow ? true : false);
     }
   }, [data]);

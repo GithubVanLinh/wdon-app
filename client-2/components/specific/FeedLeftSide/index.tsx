@@ -32,7 +32,7 @@ import Link from "next/link";
 import { FeedTab } from "@/lib/feature/feed/feedSlice";
 import SideTab from "./SideTab";
 import { useAppSelector } from "@/lib/hooks";
-import { useProfile } from "@/hooks/useProfile";
+import Menu from "@/components/common/Menu";
 
 export interface FeedLeftSideProps {
   currentTab: FeedTab;
@@ -42,7 +42,7 @@ export default function FeedLeftSide({
   currentTab,
   ...res
 }: Readonly<FeedLeftSideProps & DivProps>) {
-  const [profile, errorLoad] = useProfile();
+  const profile = useAppSelector((state) => state.auth.profile);
 
   if (profile) {
     return (
@@ -101,14 +101,27 @@ export default function FeedLeftSide({
             />
             <SideTab
               selected={currentTab === "profile"}
-              path="/profile"
+              path={`/${profile._id}`}
               name="Profile"
               icon={<UserIcon width={30} height={30} />}
             />
-            <ImageButton
-              text="More"
-              image={<EllipsisHorizontalIcon width={30} height={30} />}
-            />
+            <div className="relative">
+              <Menu
+                menu={
+                  <div className="flex flex-col divide-y-2 w-full">
+                    <Button>WDCommic</Button>
+                    <Button>WDCommic</Button>
+                    <Button>WDCommic</Button>
+                    <Button>WDCommic</Button>
+                  </div>
+                }
+              >
+                <ImageButton
+                  text="More"
+                  image={<EllipsisHorizontalIcon width={30} height={30} />}
+                />
+              </Menu>
+            </div>
             <Link
               href="/post"
               scroll={false}

@@ -1,6 +1,6 @@
 const Media = {
   default: {
-    avatar: 'avatar.png',
+    avatar: 'default/avatar.png',
     headImage: 'default/head.jpg',
   },
   emoji: {

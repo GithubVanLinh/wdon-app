@@ -13,6 +13,7 @@ import Link from "next/link";
 import { Profile } from "@/utils/type/post";
 import { toLocalDate } from "@/utils/date";
 import { follow as f, unfollow } from "../../../services/userService";
+import { useNotify } from "@/hooks/useNotify";
 
 export interface ProfileHeaderProps {
   profile: Profile;
@@ -25,6 +26,8 @@ export default function ProfileHeader({
   onFollowClicked,
   follow = "none",
 }: Readonly<ProfileHeaderProps>) {
+  const [showNotify] = useNotify();
+
   const handleFollowClick = async () => {
     if (follow === "follow") {
       const data = await f(_id);
@@ -36,14 +39,20 @@ export default function ProfileHeader({
       onFollowClicked();
     }
   };
+  const handleMessageClicked = async () => {
+    showNotify("message ");
+  };
+
   return (
     <div className="flex flex-col">
-      <div className="relative w-full h-72 ">
+      <div className="relative w-full h-72">
         <Image
           alt="head"
           fill
+          sizes="100%"
+          priority
           src={background}
-          className="object-cover object-top"
+          className="object-cover object-top z-0"
         />
         <Image
           alt="avatar"
@@ -62,6 +71,9 @@ export default function ProfileHeader({
             />
             <ImageButton
               className="border"
+              onClick={() => {
+                handleMessageClicked();
+              }}
               image={<EnvelopeIcon width={20} height={20} />}
             />
 
@@ -74,7 +86,8 @@ export default function ProfileHeader({
           </div>
         ) : (
           <Link
-            href="#"
+            href="/setting/profile"
+            scroll={false}
             className="m-2 border py-2 px-4 rounded-full justify-center items-center flex"
           >
             Edit profile

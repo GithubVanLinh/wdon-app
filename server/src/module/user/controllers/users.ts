@@ -25,7 +25,10 @@ export class UserController {
     @Body() body: CreateUserDto,
     @UploadedFile() avatar: Express.Multer.File,
   ) {
-    const avatarPath = saveFileToLocal('/uploads', avatar);
+    let avatarPath;
+    if (avatar) {
+      avatarPath = saveFileToLocal('/uploads', avatar);
+    }
     try {
       return await this.userService.createUser({
         ...body,
@@ -37,7 +40,9 @@ export class UserController {
         password: body.password,
       });
     } catch (error) {
-      deleteFileFromLocal('/uploads/' + avatarPath);
+      if (avatarPath) {
+        deleteFileFromLocal('/uploads/' + avatarPath);
+      }
       throw error;
     }
   }

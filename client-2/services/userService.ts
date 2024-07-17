@@ -16,7 +16,6 @@ const getProfileByProfileId = async (
   profileId: string
 ): Promise<{ profile: Profile; relationship: RelationshipResponse }> => {
   const data = await get(apiConfig.endpoints.getProfileById(profileId));
-  await wait(3000);
   return data.data;
 };
 

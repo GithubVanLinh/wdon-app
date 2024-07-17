@@ -12,7 +12,7 @@ export default function Layout({ children }: Readonly<LayoutProps>) {
   const currentTabState = useAppSelector((state) => state.feed.currentTab);
   return (
     <div className="flex flex-row justify-between">
-      <div className="hidden sm:flex sm:flex-row min-w-0 bg-white sticky top-0 basis-0 grow shrink h-screen justify-end">
+      <div className="hidden sm:flex sm:flex-row min-w-0 bg-white sticky top-0 basis-0 grow shrink h-screen justify-end z-40">
         <FeedLeftSide
           currentTab={currentTabState}
           className="flex w-full xl:w-10/12 h-full"

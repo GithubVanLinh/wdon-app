@@ -16,8 +16,6 @@ export interface UserInfoProps {
 }
 
 export default function UserInfo({ user }: Readonly<UserInfoProps>) {
-  const router = useRouter();
-  const dispatch = useAppDispatch();
   const logout = useLogout();
 
   return (

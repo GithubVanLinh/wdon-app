@@ -18,10 +18,8 @@ import { ChangeEvent, FormEvent, useEffect, useRef, useState } from "react";
 
 import "./style.css";
 import Button from "@/components/common/Button";
-import { MIMEType } from "util";
 import { createPost } from "@/services/postService";
-import { useAppDispatch } from "@/lib/hooks";
-import { hideNotify, showNotify } from "@/lib/feature/app/appSlice";
+import { useNotify } from "@/hooks/useNotify";
 
 export interface CreatePostFormProps {
   avatar: string;
@@ -40,7 +38,7 @@ export default function CreatePostForm({
   const router = useRouter();
   const imageRef = useRef(null);
 
-  const dispatch = useAppDispatch();
+  const [showNotify] = useNotify();
 
   const [postData, setPostData] = useState<PostCreateData>({
     auth: "friend",
@@ -113,11 +111,7 @@ export default function CreatePostForm({
 
     const response = await createPost(postData);
 
-    dispatch(showNotify("uploaded"));
-    setTimeout(() => {
-      console.log("hide");
-      dispatch(hideNotify());
-    }, 3000);
+    showNotify("uploaded");
     console.log(response);
     router.back();
   };

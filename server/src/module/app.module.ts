@@ -1,8 +1,8 @@
-import { Module } from '@nestjs/common';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { AuthModule } from './auth/module';
-import { APP_GUARD } from '@nestjs/core';
+import { APP_GUARD, APP_INTERCEPTOR } from '@nestjs/core';
 import { JwtAuthGuard } from './auth/guard/jwt';
 import { UserModule } from './user/module';
 import { PostModule } from './post/module';
@@ -10,7 +10,10 @@ import { SocketModule } from './socket/module';
 import { StatsModule } from './stats/module';
 import { MediaModule } from './media/module';
 import { MessageModule } from './message/module';
-
+import { TimeExecuteInterceptor } from 'src/intercepters/timequery';
+import { ElasticModule } from './elastic.module';
+import { LoggerModule } from './logger/module';
+import { AppLoggerMiddleware } from './middleware';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -22,6 +25,8 @@ import { MessageModule } from './message/module';
     StatsModule,
     MediaModule,
     MessageModule,
+    ElasticModule,
+    LoggerModule,
   ],
   controllers: [],
   providers: [
@@ -29,6 +34,15 @@ import { MessageModule } from './message/module';
       provide: APP_GUARD,
       useClass: JwtAuthGuard,
     },
+    TimeExecuteInterceptor,
+    {
+      provide: APP_INTERCEPTOR,
+      useExisting: TimeExecuteInterceptor,
+    },
   ],
 })
-export class AppModule {}
+export class AppModule implements NestModule {
+  configure(consumer: MiddlewareConsumer): void {
+    consumer.apply(AppLoggerMiddleware).forRoutes('*');
+  }
+}

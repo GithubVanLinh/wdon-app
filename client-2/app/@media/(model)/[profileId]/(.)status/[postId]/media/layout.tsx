@@ -27,7 +27,7 @@ export default function Layout({
   if (error) return <p>Error: {error.message}</p>;
 
   return (
-    <div className="fixed flex flex-row z-20 top-0 left-0 h-screen w-screen bg-black/90">
+    <div className="fixed flex flex-row z-50 top-0 left-0 h-screen w-screen bg-black/90">
       <div className="flex grow shrink basis-0 relative">{children}</div>
       <div className="hidden xl:flex bg-white h-full basis-auto w-96 min-w-0">
         <LoadingAndError loading={loading} error={error}>

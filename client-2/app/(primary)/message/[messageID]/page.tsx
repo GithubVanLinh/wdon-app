@@ -6,7 +6,6 @@ import List from "@/components/common/List";
 import Loading from "@/components/common/Loading";
 import LoadingAndError from "@/components/common/LoadingAndError";
 import StickyArea from "@/components/common/StickyArea";
-import { useProfile } from "@/hooks/useProfile";
 import useService from "@/hooks/useService";
 import {
   addMessage,

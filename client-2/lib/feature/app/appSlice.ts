@@ -1,12 +1,18 @@
+import { AppTheme } from "@/config/theme";
 import { PayloadAction, createSlice } from "@reduxjs/toolkit";
 
 interface NotifyState {
-  notify?: string;
+  notify: string;
+  isShowNotify: boolean;
   isConnectSocket: boolean;
+  theme: AppTheme;
 }
 
 const initialState: NotifyState = {
   isConnectSocket: false,
+  notify: "",
+  isShowNotify: false,
+  theme: "light",
 };
 
 const appSlice = createSlice({
@@ -20,15 +26,24 @@ const appSlice = createSlice({
       state.isConnectSocket = false;
     },
     showNotify: (state, action: PayloadAction<string>) => {
+      state.isShowNotify = true;
       state.notify = action.payload;
     },
     hideNotify: (state) => {
-      state.notify = undefined;
+      state.isShowNotify = false;
+    },
+    setTheme: (state, action: PayloadAction<AppTheme>) => {
+      state.theme = action.payload;
     },
   },
 });
 
-export const { showNotify, hideNotify, connectedSocket, disconnectedSocket } =
-  appSlice.actions;
+export const {
+  showNotify,
+  hideNotify,
+  connectedSocket,
+  disconnectedSocket,
+  setTheme,
+} = appSlice.actions;
 
 export default appSlice.reducer;

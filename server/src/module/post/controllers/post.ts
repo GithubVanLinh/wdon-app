@@ -21,8 +21,9 @@ import { deleteFileFromLocal, saveFileToLocal } from 'src/utils';
 import { PostGateway } from '../gateway';
 import { ApiTags } from '@nestjs/swagger';
 import { GetPostsDto } from '../dto/get-post.dt';
+import { Public } from 'src/module/auth/decorators/public';
 
-const MIMETYPE = ['image/png', 'image/jpeg', 'video/mp4'];
+const MIMETYPE = ['image/png', 'image/jpeg', 'image/webp', 'video/mp4'];
 
 @Controller('posts')
 @ApiTags('Post')
@@ -33,9 +34,11 @@ export class PostController {
     private postGateway: PostGateway,
   ) {}
 
+  @Public()
   @Post('/test')
   async test() {
-    this.postGateway.sendAll();
+    // return await this.postService.createSampleInElastic();
+    return await this.postService.getElasticData();
   }
 
   @Post()

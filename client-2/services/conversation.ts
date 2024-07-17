@@ -1,5 +1,5 @@
 import apiConfig from "@/config/apiConfig";
-import { get } from "@/utils/api";
+import { get, post } from "@/utils/api";
 import { ApiResponse } from "@/utils/type/api";
 import { Conversation, Message } from "@/utils/type/conversation";
 
@@ -17,4 +17,22 @@ const getListMessageFromConversation = async (id: string) => {
   return data.data;
 };
 
-export { getListConversation, getListMessageFromConversation };
+const createConversation = async (id: string) => {
+  const data: ApiResponse<Conversation> = await post(
+    apiConfig.endpoints.createConversation,
+    {
+      participants: [
+        {
+          profile: id,
+        },
+      ],
+    }
+  );
+  return data.data;
+};
+
+export {
+  getListConversation,
+  getListMessageFromConversation,
+  createConversation,
+};

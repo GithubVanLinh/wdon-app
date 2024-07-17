@@ -8,9 +8,12 @@ import * as path from 'path';
 import { RedisIoAdapter } from './RedisAdapter';
 import { DocumentBuilder, SwaggerModule } from '@nestjs/swagger';
 import { MediaLinkInterceptor } from './intercepters/medialink';
+import { MyLogger } from './module/logger/logger';
 
 async function bootstrap() {
-  const app = await NestFactory.create<NestExpressApplication>(AppModule);
+  const app = await NestFactory.create<NestExpressApplication>(AppModule, {
+    logger: false,
+  });
 
   const config = new DocumentBuilder()
     .setTitle('WDon Api')
@@ -24,6 +27,8 @@ async function bootstrap() {
   app.enableCors();
   const httpAdapterHost = app.get(HttpAdapterHost);
   app.useGlobalFilters(new AllExceptionsFilter(httpAdapterHost));
+  app.useLogger(app.get(MyLogger));
+
   app.useStaticAssets(path.join(__dirname, '..', 'uploads'), {
     prefix: '/uploads/',
   });

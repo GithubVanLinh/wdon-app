@@ -1,6 +1,6 @@
 "use client";
 import CreatePostForm from "@/components/specific/CreatePostCard";
-import { useProfile } from "@/hooks/useProfile";
+import { useAppSelector } from "@/lib/hooks";
 import { usePathname, useRouter } from "next/navigation";
 import { useEffect, useRef } from "react";
 
@@ -10,8 +10,7 @@ export default function Page({}: Readonly<PageProps>) {
   const createModel = useRef(null);
   const router = useRouter();
   const pathname = usePathname();
-
-  const [profile, error] = useProfile();
+  const profile = useAppSelector((state) => state.auth.profile);
 
   useEffect(() => {}, [pathname]);
 

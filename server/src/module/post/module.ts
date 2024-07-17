@@ -7,6 +7,7 @@ import { PostService } from './services/post';
 import { TagService } from './services/tag';
 import { CommunicationModule } from '../communication/module';
 import { PostGateway } from './gateway';
+import { ElasticsearchModule } from '@nestjs/elasticsearch';
 
 @Module({
   imports: [
@@ -14,6 +15,15 @@ import { PostGateway } from './gateway';
       { name: Post.name, schema: PostSchema },
       { name: Tag.name, schema: TagSchema },
     ]),
+    ElasticsearchModule.register({
+      node: 'https://localhost:9200',
+      auth: {
+        apiKey: 'WHBTTXY1QUJNQWdNblVLQ0E4cVU6bkpWQ3RaOG1SWDZ5dHBHaUtUeHpUUQ==',
+      },
+      tls: {
+        rejectUnauthorized: false,
+      },
+    }),
     CommunicationModule,
   ],
   controllers: [PostController],

@@ -24,6 +24,7 @@ export default function AuthProvider({
   children,
 }: Readonly<AuthProviderProps>) {
   const notify = useAppSelector((state) => state.app.notify);
+  const isShowNotify = useAppSelector((state) => state.app.isShowNotify);
   const router = useRouter();
   const dispatch = useAppDispatch();
   const stateToken = useAppSelector((state) => state.auth.token);
@@ -61,11 +62,16 @@ export default function AuthProvider({
   }
   return (
     <>
-      {notify && (
-        <div className="fixed border bg-blue-300 flex justify-center items-center rounded-full bottom-2 right-2 z-50 w-1/6 h-20">
-          notify
+      {
+        <div
+          className={
+            "fixed bg-blue-300 flex justify-center items-center rounded-full bottom-2 right-2 z-50 w-1/6 transition-all duration-500 overflow-hidden " +
+            (notify && isShowNotify ? "max-h-20" : "max-h-0")
+          }
+        >
+          <div className="p-2 border w-full h-full">{notify}</div>
         </div>
-      )}
+      }
       {children}
     </>
   );

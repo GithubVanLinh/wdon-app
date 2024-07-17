@@ -4,6 +4,7 @@ import "./globals.css";
 import StoreProvider from "./StoreProvider";
 import AuthProvider from "./AuthProvider";
 import SocketProvider from "./SocketProvider";
+import ThemeProvider from "./ThemeProvider";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -16,22 +17,27 @@ export default function RootLayout({
   children,
   media,
   post,
+  setting,
 }: Readonly<{
   children: React.ReactNode;
   media: React.ReactNode;
   post: React.ReactNode;
+  setting: React.ReactNode;
 }>) {
   return (
     <html lang="en">
       <body className={inter.className}>
         <StoreProvider>
-          <AuthProvider>
-            <SocketProvider>
-              {media}
-              {post}
-              {children}
-            </SocketProvider>
-          </AuthProvider>
+          <ThemeProvider>
+            <AuthProvider>
+              <SocketProvider>
+                {media}
+                {post}
+                {setting}
+                {children}
+              </SocketProvider>
+            </AuthProvider>
+          </ThemeProvider>
         </StoreProvider>
       </body>
     </html>
