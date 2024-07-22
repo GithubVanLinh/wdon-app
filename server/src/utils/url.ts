@@ -1,4 +1,5 @@
 import { Media } from './config/media';
+import * as path from 'path';
 
 export function getFullMediaUrl(name: string) {
   if (!name) {
@@ -7,5 +8,5 @@ export function getFullMediaUrl(name: string) {
   if (name.startsWith('http')) {
     return name;
   }
-  return process.env.BASE_URL + '/uploads/' + name;
+  return path.join(process.env.BASE_URL, '/uploads/', name);
 }

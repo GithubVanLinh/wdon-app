@@ -14,6 +14,7 @@ import { TimeExecuteInterceptor } from 'src/intercepters/timequery';
 import { ElasticModule } from './elastic.module';
 import { LoggerModule } from './logger/module';
 import { AppLoggerMiddleware } from './middleware';
+import { StickerModule } from './sticker/module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -27,6 +28,7 @@ import { AppLoggerMiddleware } from './middleware';
     MessageModule,
     ElasticModule,
     LoggerModule,
+    StickerModule,
   ],
   controllers: [],
   providers: [

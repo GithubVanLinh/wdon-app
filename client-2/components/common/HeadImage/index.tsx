@@ -14,6 +14,7 @@ import { Profile } from "@/utils/type/post";
 import { toLocalDate } from "@/utils/date";
 import { follow as f, unfollow } from "../../../services/userService";
 import { useNotify } from "@/hooks/useNotify";
+import { createConversation } from "@/services/conversation";
 
 export interface ProfileHeaderProps {
   profile: Profile;
@@ -40,6 +41,7 @@ export default function ProfileHeader({
     }
   };
   const handleMessageClicked = async () => {
+    await createConversation(_id);
     showNotify("message ");
   };
 

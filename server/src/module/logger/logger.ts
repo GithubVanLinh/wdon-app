@@ -13,7 +13,6 @@ export class MyLogger implements LoggerService {
 
   log(message: any, ...optionalParams: any[]) {
     const time = new Date();
-    console.log(time.toLocaleTimeString(), optionalParams, message);
 
     if (message instanceof LoggerFormat) {
       this.elastc.index({
@@ -22,6 +21,8 @@ export class MyLogger implements LoggerService {
           ...message,
         },
       });
+    } else {
+      console.log(time.toLocaleTimeString(), optionalParams, message);
     }
   }
   error(message: any, ...optionalParams: any[]) {

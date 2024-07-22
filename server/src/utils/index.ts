@@ -6,7 +6,8 @@ export type AllowMimeType =
   | 'image/png'
   | 'image/jpeg'
   | 'video/mp4'
-  | 'text/plain';
+  | 'text/plain'
+  | 'image/webp';
 
 export function getExtFromMIME(mime: AllowMimeType) {
   const data = {
@@ -14,8 +15,16 @@ export function getExtFromMIME(mime: AllowMimeType) {
     'image/jpeg': '.jpg',
     'video/mp4': '.mp4',
     'text/plain': '.txt',
+    'image/webp': '.webp',
   };
   return data[mime];
+}
+
+export function removeFolder(folderPath: string) {
+  const exists = fs.existsSync(folderPath);
+  if (exists) {
+    fs.rmSync(folderPath, { force: true, recursive: true });
+  }
 }
 
 /**
@@ -28,6 +37,10 @@ export function saveFileToLocal(
   folderPath: string,
   file: { mimetype: string; buffer: Buffer },
 ) {
+  if (!fs.existsSync(folderPath)) {
+    fs.mkdirSync(folderPath, { recursive: true });
+  }
+
   const name =
     randomString(5) +
     Date.now().toString() +

@@ -16,7 +16,8 @@ export interface Message {
   _id: string;
   conversation: string;
   from: string;
-  message: string;
+  message?: string;
+  sticker?: string;
   updatedAt: Date;
   createdAt: Date;
   show: boolean;

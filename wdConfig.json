@@ -9,6 +9,15 @@
         "message": "string",
         "media": "string"
       }
+    },
+    {
+      "name": "Sticker",
+      "schema": {
+        "name": "string",
+        "stickers": "string",
+        "owner": "string",
+        "num": "number"
+      }
     }
   ]
 }

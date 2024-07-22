@@ -15,6 +15,7 @@ const apiConfig = {
     createPost: "/posts",
     getPosts: "/posts",
     getPost: (id: string) => `/posts/${id}`,
+    getStickers: "/sticker",
   },
   headers: {
     "Content-Type": "application/json",

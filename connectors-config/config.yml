@@ -8,9 +8,9 @@
 ## ------------------------------- Connectors -------------------------------
 # When connecting to your cloud deployment you should edit the host value
 connectors:
-  - connector_id: "YZSuv5ABMAgMnUKCF8qI"
+  - connector_id: "o50N2pABcUEmyltlCzzB"
     service_type: "mongodb"
-    api_key: "WXBTdXY1QUJNQWdNblVLQzlzb0M6NHRyQ25sX0tTODJjUDE4LUo0M19FUQ=="
+    api_key: "cEowTjJwQUJjVUVteWx0bGlqelg6ajFqRW8wRzlTb1cyWTFrNEpfRDVGUQ=="
 elasticsearch:
   host: "https://es01:9200/"
   username: "elastic"

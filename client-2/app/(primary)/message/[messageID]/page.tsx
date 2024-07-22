@@ -26,6 +26,10 @@ import { FormEvent, useEffect, useRef, useState } from "react";
 import { useDispatch } from "react-redux";
 
 import "./style.css";
+import HideElement from "@/components/common/HideElement";
+import StickerList from "./_components/sticker";
+import MediaArea from "./_components/MediaArea";
+import Image from "next/image";
 
 export interface PageProps {
   params: {
@@ -40,6 +44,7 @@ export default function Page({ params: { messageID } }: Readonly<PageProps>) {
     ? JSON.parse(JSON.stringify(messages.data[messageID]))
     : [];
   const [messageInput, setMessageInput] = useState("");
+  const [showSticker, setShowSticker] = useState(false);
   const dispatch = useDispatch();
   // const curMessage = messages.data[messageID];
 
@@ -47,7 +52,6 @@ export default function Page({ params: { messageID } }: Readonly<PageProps>) {
   const [error, setError] = useState(null);
 
   const scrollToBottom = () => {
-    console.log("scrollToBottom");
     const element = document.querySelector("#list-message");
     if (element) {
       element.scrollTop = element.scrollHeight;
@@ -78,7 +82,7 @@ export default function Page({ params: { messageID } }: Readonly<PageProps>) {
     e.currentTarget.style.height = e.currentTarget.scrollHeight + "px";
   };
   const onSubmit = async () => {
-    const res = await sendMessage(messageID, messageInput);
+    const res = await sendMessage(messageID, { message: messageInput });
     scrollToBottom();
     // dispatch(addMessage({ key: messageID, message: res }));
   };
@@ -88,6 +92,9 @@ export default function Page({ params: { messageID } }: Readonly<PageProps>) {
   const onFormSubmit = () => {
     onSubmit();
     onPostSubmit();
+  };
+  const onStickerClick = async (path: string) => {
+    await sendMessage(messageID, { sticker: path });
   };
   return (
     <div
@@ -126,16 +133,35 @@ export default function Page({ params: { messageID } }: Readonly<PageProps>) {
                   (it.from === profileId ? "items-end" : "items-start")
                 }
               >
-                <p
-                  className={
-                    "wrap-any max-w-7/10 rounded-t-3xl flex flex-row p-2" +
-                    (it.from === profileId
-                      ? " bg-blue-400 text-right items-end rounded-bl-3xl text-white"
-                      : " bg-white text-left items-start rounded-br-3xl")
-                  }
-                >
-                  {it.message}
-                </p>
+                <div className=" max-w-7/10 ">
+                  {it.sticker && (
+                    <div>
+                      <Image
+                        alt={it.sticker}
+                        src={it.sticker}
+                        width={300}
+                        height={300}
+                        className="w-full h-full"
+                        onLoad={() => {
+                          scrollToBottom();
+                        }}
+                      />
+                    </div>
+                  )}
+                  {it.message && (
+                    <p
+                      className={
+                        "wrap-anyrounded-t-3xl flex flex-row p-2" +
+                        (it.from === profileId
+                          ? " bg-blue-400 text-right items-end rounded-bl-3xl text-white"
+                          : " bg-white text-left items-start rounded-br-3xl")
+                      }
+                    >
+                      {it.message}
+                    </p>
+                  )}
+                </div>
+
                 {it.show && (
                   <span className="text-xs text-gray-400">
                     {new Date(it.createdAt).toLocaleTimeString() +
@@ -154,40 +180,51 @@ export default function Page({ params: { messageID } }: Readonly<PageProps>) {
             e.preventDefault();
             onFormSubmit();
           }}
-          className=" bg-slate-200 p-2 rounded-lg flex flex-row justify-between items-center"
+          className="flex flex-col"
         >
-          <div className="flex flex-row text-blue-600">
-            <ImageButton image={<PhotoIcon height={24} width={24} />} />
-            <ImageButton image={<GifIcon height={24} width={24} />} />
-            <ImageButton image={<FaceSmileIcon height={24} width={24} />} />
+          <div className=" bg-slate-200 p-2 rounded-lg flex flex-row justify-between items-center">
+            <div className="flex flex-row text-blue-600">
+              <ImageButton image={<PhotoIcon height={24} width={24} />} />
+              <ImageButton image={<GifIcon height={24} width={24} />} />
+              <ImageButton
+                image={<FaceSmileIcon height={24} width={24} />}
+                onClick={() => {
+                  setShowSticker(!showSticker);
+                }}
+              />
+            </div>
+            <div className="flex flex-grow">
+              <textarea
+                value={messageInput}
+                onKeyDown={(e) => {
+                  if (e.key == "Enter" && !e.shiftKey) {
+                    e.preventDefault();
+                    onFormSubmit();
+                  }
+                }}
+                name="text"
+                onInput={(e) => {
+                  autoResize(e);
+                  setMessageInput(e.currentTarget.value);
+                }}
+                placeholder="Write new message..."
+                rows={1}
+                className="bg-inherit outline-none w-full resize-none overflow-hidden min-h-full max-h-40"
+              ></textarea>
+            </div>
+            <div className="text-blue-600">
+              <button
+                type="submit"
+                className="rounded-full hover:bg-gray-300 p-2"
+              >
+                <PaperAirplaneIcon height={24} width={24} />
+              </button>
+            </div>
           </div>
-          <div className="flex flex-grow">
-            <textarea
-              value={messageInput}
-              onKeyDown={(e) => {
-                if (e.key == "Enter" && !e.shiftKey) {
-                  e.preventDefault();
-                  onFormSubmit();
-                }
-              }}
-              name="text"
-              onInput={(e) => {
-                autoResize(e);
-                setMessageInput(e.currentTarget.value);
-              }}
-              placeholder="Write new message..."
-              rows={1}
-              className="bg-inherit outline-none w-full resize-none overflow-hidden min-h-full max-h-40"
-            ></textarea>
-          </div>
-          <div className="text-blue-600">
-            <button
-              type="submit"
-              className="rounded-full hover:bg-gray-300 p-2"
-            >
-              <PaperAirplaneIcon height={24} width={24} />
-            </button>
-          </div>
+
+          <HideElement open={showSticker}>
+            <MediaArea onIconClicked={onStickerClick} />
+          </HideElement>
         </form>
       </StickyArea>
     </div>

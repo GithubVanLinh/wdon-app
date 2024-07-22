@@ -35,3 +35,11 @@ body {
     text-wrap: balance;
   }
 }
+
+.scroll-thin {
+  scrollbar-width: thin;
+}
+
+.scroll-none {
+  scrollbar-width: none;
+}
