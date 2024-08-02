@@ -40,7 +40,7 @@ export default function Page({}: Readonly<PageProps>) {
   return (
     <div
       ref={createModel}
-      className="fixed bg-black/70 z-20 w-full h-full flex flex-col justify-start pt-4 items-center overflow-auto"
+      className="fixed bg-black/70 z-50 w-full h-full flex flex-col justify-start pt-4 items-center overflow-auto"
     >
       <div className="w-1/2 h-1/2">
         <CreatePostForm avatar={profile?.avatar || ""} />

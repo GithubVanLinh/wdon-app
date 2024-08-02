@@ -1,4 +1,5 @@
-import { IsOptional, IsString } from 'class-validator';
+import { IsEnum, IsOptional, IsString } from 'class-validator';
+import { ConversationTypeEnum } from '../models/conversation';
 
 export class FindConversationDto {
   @IsString()
@@ -8,4 +9,8 @@ export class FindConversationDto {
   @IsString()
   @IsOptional()
   target?: string;
+
+  @IsString()
+  @IsEnum(ConversationTypeEnum)
+  type?: ConversationTypeEnum;
 }

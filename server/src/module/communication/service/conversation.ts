@@ -19,15 +19,34 @@ export class ConversationService {
   ) {}
 
   async find(condition: FindConversationDto) {
-    console.log(condition);
+    const conditions: any = [
+      {
+        'participants.profile': new mongoose.Types.ObjectId(
+          condition.profile_id,
+        ),
+      },
+    ];
+    if (condition.type) {
+      conditions.push({
+        type: condition.type,
+      });
+    }
+
+    if (condition.target) {
+      conditions.push({
+        'participants.profile': new mongoose.Types.ObjectId(condition.target),
+      });
+      conditions.push({
+        type: ConversationTypeEnum.PERSONAL,
+      });
+    }
+
     const data = await this.conversationModel.aggregate([
       // { $match: { type: type } },
-      { $unwind: { path: '$participants' } },
+      // { $unwind: { path: '$participants' } },
       {
         $match: {
-          'participants.profile': new mongoose.Types.ObjectId(
-            condition.profile_id,
-          ),
+          $and: conditions,
         },
       },
       // {

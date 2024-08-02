@@ -1,4 +1,10 @@
-import { Body, Controller, Get, Post } from '@nestjs/common';
+import {
+  BadRequestException,
+  Body,
+  Controller,
+  Get,
+  Post,
+} from '@nestjs/common';
 import { ApiBearerAuth, ApiOperation, ApiTags } from '@nestjs/swagger';
 import { ConversationService } from '../service/conversation';
 import { CreateConversationDto } from '../dto/create-conversation';
@@ -19,8 +25,14 @@ export class ConversationController {
     @ProfileId() profileId: string,
     @Body() conversationDto: CreateConversationDto,
   ) {
-    const conversation = await this.conversationService.find({});
+    const conversation = await this.conversationService.find({
+      profile_id: profileId,
+      target: conversationDto.participants[0].profile,
+    });
 
+    if (conversation.length > 0) {
+      throw new BadRequestException('conversation already exists');
+    }
     return await this.conversationService.create({
       type: conversationDto.type,
       owner: profileId,
