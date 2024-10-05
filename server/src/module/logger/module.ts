@@ -1,10 +1,10 @@
-import { Module } from '@nestjs/common';
-import { MyLogger } from './logger';
-import { ElasticModule } from '../elastic.module';
+// import { Module } from '@nestjs/common';
+// import { MyLogger } from './logger';
+// // import { ElasticModule } from '../elastic.module';
 
-@Module({
-  imports: [ElasticModule],
-  providers: [MyLogger],
-  exports: [MyLogger],
-})
-export class LoggerModule {}
+// @Module({
+//   imports: [],
+//   providers: [MyLogger],
+//   exports: [MyLogger],
+// })
+// export class LoggerModule {}

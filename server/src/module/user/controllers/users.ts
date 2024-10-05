@@ -25,6 +25,7 @@ export class UserController {
     @Body() body: CreateUserDto,
     @UploadedFile() avatar: Express.Multer.File,
   ) {
+    console.log(body);
     let avatarPath;
     if (avatar) {
       avatarPath = saveFileToLocal('/uploads', avatar);

@@ -11,8 +11,8 @@ import { StatsModule } from './stats/module';
 import { MediaModule } from './media/module';
 import { MessageModule } from './message/module';
 import { TimeExecuteInterceptor } from 'src/intercepters/timequery';
-import { ElasticModule } from './elastic.module';
-import { LoggerModule } from './logger/module';
+// import { ElasticModule } from './elastic.module';
+// import { LoggerModule } from './logger/module';
 import { AppLoggerMiddleware } from './middleware';
 import { StickerModule } from './sticker/module';
 @Module({
@@ -26,8 +26,8 @@ import { StickerModule } from './sticker/module';
     StatsModule,
     MediaModule,
     MessageModule,
-    ElasticModule,
-    LoggerModule,
+    // ElasticModule,
+    // LoggerModule,
     StickerModule,
   ],
   controllers: [],
