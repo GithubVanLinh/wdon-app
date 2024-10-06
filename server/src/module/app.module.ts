@@ -15,6 +15,7 @@ import { TimeExecuteInterceptor } from 'src/intercepters/timequery';
 // import { LoggerModule } from './logger/module';
 import { AppLoggerMiddleware } from './middleware';
 import { StickerModule } from './sticker/module';
+import { MangaModule } from './manga/module';
 @Module({
   imports: [
     ConfigModule.forRoot({ isGlobal: true }),
@@ -26,6 +27,7 @@ import { StickerModule } from './sticker/module';
     StatsModule,
     MediaModule,
     MessageModule,
+    MangaModule,
     // ElasticModule,
     // LoggerModule,
     StickerModule,

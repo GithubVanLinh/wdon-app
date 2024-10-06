@@ -27,6 +27,27 @@ export function removeFolder(folderPath: string) {
   }
 }
 
+export function saveFile(
+  absDir: string,
+  file: { mimetype: string; buffer: Buffer },
+) {
+  if (!fs.existsSync(absDir)) {
+    fs.mkdirSync(absDir, { recursive: true });
+  }
+
+  const name =
+    randomString(5) +
+    Date.now().toString() +
+    getExtFromMIME(file.mimetype as AllowMimeType);
+  const folderName = absDir;
+  if (!fs.existsSync(folderName)) {
+    fs.mkdirSync(folderName);
+  }
+  const realPath = path.join(folderName, name);
+  fs.writeFileSync(realPath, file.buffer);
+  return name;
+}
+
 /**
  * save file to local host
  * @param folderPath path to folder
