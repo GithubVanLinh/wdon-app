@@ -39,6 +39,7 @@ export default function MangaHead({ onMenuClicked }: Readonly<MangaHeadProps>) {
           />
           <ImageButton
             image={<ArrowUpTrayIcon width={24} height={24} />}
+            href="/manga/add"
             hover={{
               tooltip: { text: "Upload Commic", position: "bottom" },
               bg: "hover:bg-blue-700",

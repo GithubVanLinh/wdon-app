@@ -16,6 +16,9 @@ const apiConfig = {
     getPosts: "/posts",
     getPost: (id: string) => `/posts/${id}`,
     getStickers: "/sticker",
+    listManga: "/manga",
+    getManga: (id: string) => `/manga/${id}`,
+    uploadManga: "manga/upload",
   },
   headers: {
     "Content-Type": "application/json",

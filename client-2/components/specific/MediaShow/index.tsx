@@ -1,4 +1,5 @@
 import { Media } from "@/utils/type/post";
+import { convertToValidURL } from "@/utils/url";
 import Image from "next/image";
 import Link from "next/link";
 
@@ -42,7 +43,10 @@ export default function MediaShow({ media }: Readonly<MediaShowProps>) {
                   autoPlay
                   controls
                 >
-                  <source src={m.url} type="video/mp4"></source>
+                  <source
+                    src={convertToValidURL(m.url)}
+                    type="video/mp4"
+                  ></source>
                   <track kind="captions"></track>
                 </video>
               )}

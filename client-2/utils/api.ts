@@ -5,7 +5,11 @@ import axios, { AxiosError, AxiosRequestConfig } from "axios";
 const apiRequest = () => {
   const instance =
     authInstance.axios ||
-    axios.create({ headers: apiConfig.headers, baseURL: apiConfig.baseURL });
+    axios.create({
+      headers: apiConfig.headers,
+      baseURL: apiConfig.baseURL,
+      timeout: 5000,
+    });
   return instance;
 };
 

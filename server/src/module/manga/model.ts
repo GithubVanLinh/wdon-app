@@ -6,6 +6,9 @@ import { ProfileDocument } from '../user/model/profile.schema';
 @Schema()
 export class Manga extends BaseSchema {
   @Prop()
+  search_string: string;
+
+  @Prop()
   name: string;
 
   @Prop()

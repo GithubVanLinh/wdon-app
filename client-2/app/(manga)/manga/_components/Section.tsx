@@ -1,15 +1,12 @@
 import Image from "next/image";
 import Link from "next/link";
 import ComicCard from "./ComicCard";
-
-interface ComicData {
-  id: string;
-  name: string;
-  url: string;
-}
+import { Manga } from "@/utils/type/manga";
+import useService from "@/hooks/useService";
+import { getManga } from "@/services/mangaService";
 
 export interface SectionProps {
-  data: ComicData[];
+  data: Manga[];
   title: string;
   link: string;
 }
@@ -24,11 +21,11 @@ export default function Section({ data, title, link }: Readonly<SectionProps>) {
       <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-x-2 gap-y-4">
         {data.map((comic) => (
           <ComicCard
-            key={comic.id}
+            key={comic._id}
             date={new Date().toString()}
-            href="#"
+            href={`/manga/read/${comic._id}`}
             view={3000}
-            image={comic.url}
+            image={comic.headImage}
             title={comic.name}
             chapters={[{ name: "1", link: "#" }]}
           />

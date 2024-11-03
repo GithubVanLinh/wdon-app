@@ -57,10 +57,13 @@ export default function Page({
         </MediaOverlay>
       );
     } else {
+      const urlL = media.url.split("\\");
+      const url = [urlL[0], "\\", ...urlL.slice(1)].join("\\");
+      console.log("media", url);
       return (
         <MediaOverlay prev={prev} next={next}>
           <video className="object-contain" autoPlay controls>
-            <source src={media.url} type="video/mp4"></source>
+            <source src={url} type="video/mp4"></source>
             <track kind="captions"></track>
           </video>
         </MediaOverlay>

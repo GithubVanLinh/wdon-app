@@ -3,18 +3,21 @@ import {
   Body,
   Controller,
   Get,
+  Param,
   Post,
+  Query,
   UploadedFiles,
   UseInterceptors,
 } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { FileFieldsInterceptor } from '@nestjs/platform-express';
-import { ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiTags } from '@nestjs/swagger';
 import * as path from 'path';
 import { saveFile, saveFileToLocal } from 'src/utils';
 import { CreateMangaDto } from './dto/create';
 import { MangaService } from './service';
 import { ProfileId } from '../auth/decorators/user';
+import { GetListMangaDTO } from './dto/getListMangaDto';
 
 @Controller('manga')
 @ApiTags('Manga')
@@ -27,6 +30,11 @@ export class MangaController {
   @Get('/info')
   info() {
     return 'works';
+  }
+
+  @Get('/search')
+  async searchByName(@Query('name') name: string) {
+    return await this.mangaService.findNameExsist(name.toLocaleLowerCase());
   }
 
   @Post('/test')
@@ -44,6 +52,7 @@ export class MangaController {
     return saveFile(dir, files.head[0]);
   }
 
+  @ApiBearerAuth()
   @Post('/upload')
   @UseInterceptors(
     FileFieldsInterceptor([{ name: 'head', maxCount: 1 }, { name: 'mangas' }]),
@@ -96,5 +105,59 @@ export class MangaController {
       console.log(e);
       throw e;
     }
+  }
+
+  @ApiBody({
+    schema: {
+      properties: { id: { type: 'string' } },
+    },
+  })
+  @Get('/:id')
+  async getManga(@Param('id') id: string) {
+    const data = await this.mangaService.getManga(id);
+
+    const mangas = data.mangas.map((d) => {
+      return path.join(
+        this.configService.get('BASE_URL'),
+        'uploads/manga',
+        id,
+        d,
+      );
+    });
+
+    const headImage = path.join(
+      this.configService.get('BASE_URL'),
+      'uploads/manga',
+      id,
+      data.headImage,
+    );
+
+    return { ...data.toObject(), mangas: mangas, headImage };
+  }
+
+  @Get('/')
+  async getListManga(@Body() { page, pageLength, search }: GetListMangaDTO) {
+    const data = await this.mangaService.getListManga({
+      page: page,
+      pageLength: pageLength,
+      search: search,
+    });
+
+    const updateLink = data.map((d) => {
+      const id = d.id;
+      const headImage = d.headImage;
+      return {
+        ...d.toObject(),
+        id: id,
+        headImage: path.join(
+          this.configService.get('BASE_URL'),
+          'uploads/manga',
+          id,
+          headImage,
+        ),
+      };
+    });
+
+    return updateLink;
   }
 }
